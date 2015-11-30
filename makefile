@@ -5,5 +5,6 @@ default:
 	$(CXX) $(CXXFLAGS) -c src/vector.cpp
 	$(CXX) $(CXXFLAGS) -c src/object.cpp
 	$(CXX) $(CXXFLAGS) -c src/component.cpp
+	$(CXX) $(CXXFLAGS) -c src/aicomponent.cpp
 clean:
 	-rm -f *.o

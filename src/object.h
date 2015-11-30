@@ -2,14 +2,14 @@
 #define OBJECT_H_INCLUDED
 
 #include <array>
+#include "component.h"
 #include <memory>
 #include "vector.h"
 
-class Component;
-
 enum ComponentId
 {
-    ComponentLast
+    AIComponentId,
+    ComponentIdLast
 };
 
 class Object
@@ -18,14 +18,16 @@ public:
     Object();
     ~Object();
 
-    void SetComponent(const ComponentId& id, std::shared_ptr<Component> comp);
-    std::shared_ptr<Component> GetComponent(const ComponentId& id);
+    void SetComponent(const ComponentId& id, const ComponentPtr& comp);
+    ComponentPtr GetComponent(const ComponentId& id);
     const Vector2& GetPosition() const;
     void SetPosition(const Vector2& position);
+
+    void Update(uint64_t frame);
     
 private:
     Vector2 position_;
-    std::array<std::shared_ptr<Component>, ComponentLast> components_;
+    std::array<ComponentPtr, ComponentIdLast> components_;
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "object.h"
+#include "component.h"
 
 Object::Object()
 {
@@ -10,12 +11,12 @@ Object::~Object()
 
 }
 
-void Object::SetComponent(const ComponentId& id, std::shared_ptr<Component> comp)
+void Object::SetComponent(const ComponentId& id, const ComponentPtr& comp)
 {
     components_[id] = comp;
 }
 
-std::shared_ptr<Component> Object::GetComponent(const ComponentId& id)
+ComponentPtr Object::GetComponent(const ComponentId& id)
 {
     return components_[id];
 }
@@ -28,4 +29,15 @@ const Vector2& Object::GetPosition() const
 void Object::SetPosition(const Vector2& position)
 {
     position_ = position;
+}
+
+void Object::Update(uint64_t frame)
+{
+    for(auto comp : components_)
+    {
+	if(comp)
+	{
+	    comp->Update(frame);
+	}
+    }
 }
