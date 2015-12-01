@@ -5,6 +5,7 @@
 #include <memory>
 
 class Object;
+class AIComponent;
 
 class Component
 {
@@ -21,6 +22,8 @@ public:
     void SetParent(Object* parent);
     const Object* GetParent() const;
     Object* GetParent();
+
+    virtual AIComponent* AsAIComponent();
 };
 
 typedef std::shared_ptr<Component> ComponentPtr;

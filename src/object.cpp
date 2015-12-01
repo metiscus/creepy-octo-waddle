@@ -3,12 +3,10 @@
 
 Object::Object()
 {
-
 }
 
 Object::~Object()
 {
-
 }
 
 void Object::SetComponent(const ComponentId& id, const ComponentPtr& comp)
