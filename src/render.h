@@ -11,7 +11,7 @@
 
 class RenderComponent;
 
-class Render : public ComponentContainer
+class Render : public ComponentContainer<RenderComponent>
 {
 public:
     enum Layer

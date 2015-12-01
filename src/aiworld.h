@@ -8,7 +8,7 @@
 
 #include <vector>
 
-class AIWorld : public ComponentContainer
+class AIWorld : public ComponentContainer<AIComponent>
 {
 public:
     AIWorld() = default;

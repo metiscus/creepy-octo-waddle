@@ -22,6 +22,8 @@ libglad.a:
 	ar -rcs libglad.a extern/glad/src/glad.o
 
 GAME_SRC=\
+	src/main.cpp\
+	src/componentcontainer.h\
 	src/vector.cpp src/vector.h\
 	src/object.cpp src/object.h\
 	src/component.cpp src/component.h\

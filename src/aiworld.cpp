@@ -8,10 +8,10 @@ std::vector<ComponentPtr> AIWorld::QueryRange(const Vector2& center, float range
     std::vector<ComponentPtr> nearby;
     for(auto comp : components_)
     {
-	if((center - comp->GetParent()->GetPosition()).Length2() <= rangesqr)
-	{
-	    nearby.emplace_back(comp);
-	}
+        if((center - comp->GetParent()->GetPosition()).Length2() <= rangesqr)
+        {
+            nearby.emplace_back(comp);
+        }
     }
     return nearby;
 }

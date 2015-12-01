@@ -1,3 +1,5 @@
+#include <cstdio>
+#include <cstdlib>
 #include <glad/glad.h>
 #include "render.h"
 #include "rendercomponent.h"
@@ -20,6 +22,11 @@ Render::Render()
     context_ = SDL_GL_CreateContext(window_);
     assert(context_ != nullptr);
 
+    if(!gladLoadGL()) {
+         printf("Something went wrong!\n");
+         exit(-1);
+     }
+
     InitGl();
 }
 
@@ -28,7 +35,7 @@ Render::~Render()
     // clean-up sdl
     // clean-up textures
     // clean-up vao/vbos
-    assert(false);
+    assert(false); // don't remove until all cleanup tasks finished
 }
 
 void Render::InitGl()
@@ -64,6 +71,7 @@ void Render::LoadTexture(uint32_t id)
     {
         struct textureinfo info;
         assert(files[id]);
+        fprintf(stderr, "[render] : loading %s as texture %d\n", files[id], id);
         uint8_t *data = stbi_load(files[id], (int*)&info.width, (int*)&info.height, (int*)&info.channels, 0);
         assert(data);
         info.tile_width = tile_info[id * 2];
@@ -103,6 +111,12 @@ void Render::BindTexture(uint32_t id)
     else
     {
         auto itr = textures_.find(id);
+        if(itr==textures_.end())
+        {
+            LoadTexture(id);
+        }
+
+        itr = textures_.find(id);
         assert(itr!=textures_.end());
         if(itr!=textures_.end())
         {
@@ -147,6 +161,7 @@ void Render::Draw()
         // draw each drawable
         for(auto itr : tex_map)
         {
+            uint32_t drawable_count = 0;
             buffer_data.clear();
             BindTexture(itr.first);
             for(auto drawable : itr.second)
@@ -157,7 +172,13 @@ void Render::Draw()
                 buffer_data.push_back(drawable->GetWidth());
                 buffer_data.push_back(drawable->GetHeight());
                 buffer_data.push_back(drawable->GetFrame());
+                ++drawable_count;
             }
+
+            glBindVertexArray(vaos_[layer_id]);
+            glBindBuffer(GL_ARRAY_BUFFER, vbos_[layer_id]);
+            glBufferData(GL_ARRAY_BUFFER, buffer_data.size() * sizeof(float), &buffer_data[0], GL_STREAM_DRAW);
+            glDrawArrays(GL_TRIANGLES, 0, 6 * drawable_count);
         }
     }
 
