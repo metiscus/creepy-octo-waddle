@@ -38,4 +38,4 @@ game: $(GAME_OBJ) $(GAME_SRC) $(GAME_CPP:.cpp=.d) libglad.a
 clean:
 	-find -name "*.o" -exec rm -f {} \;
 	-find -name "*.d" -exec rm -f {} \;
-	-rm -f game
+	-rm -f game libglad.a

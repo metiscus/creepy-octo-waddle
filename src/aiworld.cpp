@@ -15,19 +15,3 @@ std::vector<ComponentPtr> AIWorld::QueryRange(const Vector2& center, float range
     }
     return nearby;
 }
-
-void AIWorld::AddComponent(const ComponentPtr& component)
-{
-    if(component->AsAIComponent())
-    {
-	components_.emplace_back(component);
-    }
-}
-
-void AIWorld::RemoveComponent(const ComponentPtr& component)
-{
-    components_.erase(
-	std::remove(components_.begin(), components_.end(), component),
-	components_.end()
-	);
-}

@@ -24,7 +24,9 @@ Render::Render()
 
 Render::~Render()
 {
+    // clean-up sdl
     // clean-up textures
+    // clean-up vao/vbos
     assert(false);
 }
 
@@ -41,6 +43,10 @@ void Render::InitGl()
         // vertex + uv data
         glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(0);
+
+        // texture id, tile id
+        glVertexAttribPointer(1, 2, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(1);
     }
 }
 
@@ -54,7 +60,9 @@ void Render::LoadTexture(uint32_t id)
     {
         struct textureinfo info;
         int c;
+        assert(files[id]);
         uint8_t *data = stbi_load(files[id], (int*)&info.width, (int*)&info.height, (int*)&c, 4);
+        assert(data);
         info.channels = 4;
         info.tile_width = tile_info[id * 2];
         info.tile_height = tile_info[id * 2 + 1];
@@ -69,4 +77,19 @@ void Render::LoadTexture(uint32_t id)
 
         textures_.insert(std::make_pair(id, info));
     }
+}
+
+void Render::Draw()
+{
+    glClearColor(0.f, 0.f, 0.f, 0.f);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+    // sort components into bins
+    std::array<std::vector<ComponentPtr>, LayerCount> bins;
+    for(auto comp : components_)
+    {
+        //TODO
+    }
+
+    SDL_GL_SwapWindow(window_);
 }

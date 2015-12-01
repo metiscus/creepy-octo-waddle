@@ -4,25 +4,21 @@
 #include "aicomponent.h"
 #include "component.h"
 #include "vector.h"
+#include "componentcontainer.h"
 
 #include <vector>
 
-class AIWorld
+class AIWorld : public ComponentContainer
 {
-private:
-    std::vector<ComponentPtr> components_;
-    
 public:
     AIWorld() = default;
     ~AIWorld() = default;
 
     std::vector<ComponentPtr> QueryRange(const Vector2& center, float range);
-    void AddComponent(const ComponentPtr& component);
-    void RemoveComponent(const ComponentPtr& component);
 
 };
 
 
 
 
-#endif 
+#endif

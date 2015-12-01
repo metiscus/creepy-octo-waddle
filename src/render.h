@@ -2,12 +2,16 @@
 #define RENDER_H_INCLUDED
 
 #include <array>
+#include "component.h"
+#include "componentcontainer.h"
 #include <cstdint>
 #include <unordered_map>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 
-class Render
+class RenderComponent;
+
+class Render : public ComponentContainer
 {
 public:
     enum Layer
@@ -43,6 +47,8 @@ private:
 public:
     Render();
     ~Render();
+
+    void Draw();
 };
 
 #endif // RENDER_H_INCLUDED
