@@ -30,3 +30,8 @@ AIComponent* Component::AsAIComponent()
 {
     return nullptr;
 }
+
+RenderComponent* Component::AsRenderComponent()
+{
+    return nullptr;
+}

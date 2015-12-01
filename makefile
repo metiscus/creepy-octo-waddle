@@ -28,6 +28,7 @@ GAME_SRC=\
 	src/aicomponent.cpp src/aicomponent.h\
 	src/aiworld.cpp src/aiworld.h\
 	src/render.cpp src/render.h\
+	src/rendercomponent.cpp src/rendercomponent.h\
 
 GAME_CPP= $(filter %.cpp,$(GAME_SRC))
 GAME_OBJ= $(GAME_CPP:.cpp=.o)

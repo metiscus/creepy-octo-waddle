@@ -16,9 +16,10 @@ class Render : public ComponentContainer
 public:
     enum Layer
     {
-        LayerBg,
-        LayerFg,
-        LayerUi,
+        LayerDefault = 0,
+        LayerBg = LayerDefault,
+        //LayerFg,
+        //LayerUi,
         LayerCount
     };
 
@@ -28,6 +29,8 @@ private:
 
     std::array<uint32_t, LayerCount> vaos_;
     std::array<uint32_t, LayerCount> vbos_;
+
+    uint32_t bound_texture_;
 
     struct textureinfo
     {
@@ -43,6 +46,7 @@ private:
 
     void InitGl();
     void LoadTexture(uint32_t id);
+    void BindTexture(uint32_t id);
 
 public:
     Render();
