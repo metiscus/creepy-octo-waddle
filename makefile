@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-g -Wall -Wextra -std=c++11 -Iextern/glad/include -Iextern -L.
+CXXFLAGS=-g -Wall -Wextra -Wshadow -std=c++11 -Iextern/glad/include -Iextern -L.
 
 # rule for building .o from .cpp using dependencies
 %.o: %.cpp

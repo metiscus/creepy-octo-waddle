@@ -6,13 +6,6 @@
 #include <memory>
 #include "vector.h"
 
-enum ComponentId
-{
-    AIComponentId,
-    RenderComponentId,
-    ComponentIdLast
-};
-
 class Object
 {
 public:
@@ -20,7 +13,13 @@ public:
     ~Object();
 
     void SetComponent(const ComponentId& id, const ComponentPtr& comp);
-    ComponentPtr GetComponent(const ComponentId& id);
+
+    template<typename T>
+    std::shared_ptr<T> GetComponent()
+    {
+        return std::dynamic_pointer_cast<T>(components_[T::GetComponentId()]);
+    }
+
     const Vector2& GetPosition() const;
     void SetPosition(const Vector2& position);
 

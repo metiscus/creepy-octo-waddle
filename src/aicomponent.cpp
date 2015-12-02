@@ -7,6 +7,11 @@ AIComponent::AIComponent()
 
 }
 
+ComponentId AIComponent::GetComponentId()
+{
+    return AIComponentId;
+}
+
 void AIComponent::SetWorld(AIWorld* world)
 {
     world_ = world;

@@ -6,9 +6,12 @@
 #include "rendercomponent.h"
 #include <string>
 #include <fstream>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#pragma GCC diagnostic pop
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -250,7 +253,7 @@ struct triangle_generator
     float h_width;
     float h_height;
 
-    void operator()(std::vector<float>& data)
+    inline void operator()(std::vector<float>& data)
     {
         switch(vert)
         {

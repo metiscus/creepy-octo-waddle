@@ -16,6 +16,8 @@ public:
     AIComponent();
     virtual ~AIComponent() = default;
 
+    static ComponentId GetComponentId();
+
     void SetWorld(AIWorld* world);
     void SetGoalPosition(const Vector2& position);
     void SetMaxSpeed(float speed);

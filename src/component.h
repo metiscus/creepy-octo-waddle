@@ -8,6 +8,13 @@ class Object;
 class AIComponent;
 class RenderComponent;
 
+enum ComponentId
+{
+    AIComponentId,
+    RenderComponentId,
+    ComponentIdLast
+};
+
 class Component
 {
     Object* parent_;

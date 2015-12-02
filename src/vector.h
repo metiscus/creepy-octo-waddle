@@ -13,10 +13,10 @@ public:
     : x(ix)
     , y(iy) { }
 
-    void Set(const float& x, const float& y)
+    void Set(const float& x_, const float& y_)
     {
-        this->x = x;
-        this->y = y;
+        this->x = x_;
+        this->y = y_;
     }
 
     void Normalize()

@@ -15,11 +15,6 @@ void Object::SetComponent(const ComponentId& id, const ComponentPtr& comp)
     comp->SetParent(this);
 }
 
-ComponentPtr Object::GetComponent(const ComponentId& id)
-{
-    return components_[id];
-}
-
 const Vector2& Object::GetPosition() const
 {
     return position_;

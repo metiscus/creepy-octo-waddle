@@ -14,8 +14,11 @@ public:
     RenderComponent();
     virtual ~RenderComponent() = default;
 
+    static ComponentId GetComponentId();
+
     void AddDrawable(const DrawablePtr& drawable);
     const std::vector<DrawablePtr>& GetDrawables() const;
+    std::vector<DrawablePtr> GetDrawables();
 
     virtual void Update(uint64_t frame);
     virtual RenderComponent* AsRenderComponent();
