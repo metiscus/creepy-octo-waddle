@@ -14,7 +14,10 @@ int main()
 
     std::vector<std::shared_ptr<Object> > objects;
 
-    for(int i=0; i<1000; ++i)
+
+    const float circle_radius = 250.0;
+    const int yoshi_count = 10;
+    for(int i=0; i<yoshi_count; ++i)
     {
         DrawablePtr yoshi (new Drawable());
         yoshi->SetTexture(1);
@@ -29,12 +32,11 @@ int main()
         render->AddComponent(render_comp);
 
         std::shared_ptr<AIComponent> ai_comp(new AIComponent());
-        ai_comp->SetGoalPosition(Vector2(120.0, 120.0));
-        ai_comp->SetMaxSpeed(1.);
+        ai_comp->SetMaxSpeed(3.5);
         ai_world->AddComponent(ai_comp);
 
         std::shared_ptr<Object> yoshi_obj(new Object());
-        yoshi_obj->SetPosition(Vector2(120, 120));
+        yoshi_obj->SetPosition(Vector2(200, 200));
         yoshi_obj->SetComponent(AIComponentId, ai_comp);
         yoshi_obj->SetComponent(RenderComponentId, render_comp);
 
@@ -68,9 +70,9 @@ int main()
         for(auto obj : objects)
         {
             auto ai_comp = obj->GetComponent<AIComponent>();
-            float mytheta = fmod(theta + (float)++ii, 2*3.14159);
+            float mytheta = fmod(theta + 3.14159 * 2 / (float)yoshi_count * (float)(ii++), 2*3.14159);
 
-            ai_comp->SetGoalPosition(Vector2(120.0 * cos(mytheta), 120.0 * sin(mytheta)));
+            ai_comp->SetGoalPosition(Vector2(circle_radius * cos(mytheta), circle_radius * sin(mytheta)));
             obj->Update(frame);
 
             auto render_comp = obj->GetComponent<RenderComponent>();
@@ -83,13 +85,12 @@ int main()
             {
                 drawables[0]->SetWidth(64.0);
             }
-
-            theta = fmod(theta, 2*3.14159);
         }
 
         render->Draw();
 
         theta += 0.01;
+        theta = fmod(theta, 2*3.14159);
         ++frame;
     }
 
