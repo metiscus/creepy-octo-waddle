@@ -344,22 +344,22 @@ void Render::Draw()
             {
                 triangle_generator gen(drawable->GetPosition(), drawable->GetWidth(), drawable->GetHeight());
                 gen(buffer_data);
-                buffer_data.push_back(0);
+                buffer_data.push_back(drawable->GetAnimation());
                 buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
-                buffer_data.push_back(0);
+                buffer_data.push_back(drawable->GetAnimation());
                 buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
-                buffer_data.push_back(0);
+                buffer_data.push_back(drawable->GetAnimation());
                 buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
-                buffer_data.push_back(0);
+                buffer_data.push_back(drawable->GetAnimation());
                 buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
-                buffer_data.push_back(0);
+                buffer_data.push_back(drawable->GetAnimation());
                 buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
-                buffer_data.push_back(0);
+                buffer_data.push_back(drawable->GetAnimation());
                 buffer_data.push_back(drawable->GetFrame());
                 ++drawable_count;
             }

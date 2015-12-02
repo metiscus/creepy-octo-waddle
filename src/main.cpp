@@ -14,7 +14,7 @@ int main()
 
     DrawablePtr yoshi (new Drawable());
     yoshi->SetTexture(1);
-    yoshi->SetWidth(64.0);
+    yoshi->SetWidth(32.0);
     yoshi->SetHeight(64.0);
     yoshi->SetLayer(Render::LayerBg);
 

@@ -2,6 +2,7 @@
 
 Drawable::Drawable()
     : texture_(0)
+    , animation_(0)
     , frame_(0)
     , width_(0)
     , height_(0)
@@ -18,6 +19,11 @@ void Drawable::SetTexture(uint32_t id)
 void Drawable::SetFrame(uint32_t frame)
 {
     frame_ = frame;
+}
+
+void Drawable::SetAnimation(uint32_t animation)
+{
+    animation_ = animation;
 }
 
 void Drawable::SetWidth(float width)
@@ -54,6 +60,11 @@ void Drawable::SetOffset(const Vector2& offset)
 uint32_t Drawable::GetTexture() const
 {
     return texture_;
+}
+
+uint32_t Drawable::GetAnimation() const
+{
+    return animation_;
 }
 
 uint32_t Drawable::GetFrame() const

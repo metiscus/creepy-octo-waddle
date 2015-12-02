@@ -9,6 +9,7 @@
 class Drawable
 {
     uint32_t texture_;
+    uint32_t animation_;
     uint32_t frame_;
     float width_;
     float height_;
@@ -21,6 +22,7 @@ public:
 
     void SetTexture(uint32_t id);
     void SetFrame(uint32_t frame);
+    void SetAnimation(uint32_t animation);
     void SetWidth(float width);
     void SetHeight(float height);
     void SetSize(float width, float height);
@@ -29,6 +31,7 @@ public:
     void SetOffset(const Vector2& offset);
     uint32_t GetTexture() const;
     uint32_t GetFrame() const;
+    uint32_t GetAnimation() const;
     float GetWidth() const;
     float GetHeight() const;
     void GetSize(float& width, float& height) const;
