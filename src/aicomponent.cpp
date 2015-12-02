@@ -1,4 +1,5 @@
 #include "aicomponent.h"
+#include "physicscomponent.h"
 #include "object.h"
 
 AIComponent::AIComponent()
@@ -24,10 +25,16 @@ void AIComponent::Update(uint64_t frame)
     // if not at the goal position, move towards it
     if(fabs(max_speed_-0.0001) > 0)
     {
-        Vector2 position = GetParent()->GetPosition();
-        Vector2 toGoal = (goal_position_ - position).AsUnit();
-        position += toGoal * max_speed_;
-        GetParent()->SetPosition(position);
+        const Vector2& position = GetParent()->GetPosition();
+        Vector2 toGoal = (goal_position_ - position);
+        float distanceToGoal = toGoal.Length();
+        float speed = max_speed_;
+        if(distanceToGoal < max_speed_)
+        {
+            speed = distanceToGoal;
+        }
+        toGoal /= distanceToGoal;
+        GetParent()->GetComponent<PhysicsComponent>()->SetVelocity(toGoal * speed);
     }
 }
 

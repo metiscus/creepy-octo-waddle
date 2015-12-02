@@ -4,6 +4,7 @@
 #include "aicomponent.h"
 #include "aiworld.h"
 #include "object.h"
+#include "physicscomponent.h"
 #include "render.h"
 #include "rendercomponent.h"
 
@@ -35,10 +36,13 @@ int main()
         ai_comp->SetMaxSpeed(3.5);
         ai_world->AddComponent(ai_comp);
 
+        std::shared_ptr<PhysicsComponent> phy_comp(new PhysicsComponent());
+
         std::shared_ptr<Object> yoshi_obj(new Object());
         yoshi_obj->SetPosition(Vector2(200, 200));
         yoshi_obj->SetComponent(AIComponentId, ai_comp);
         yoshi_obj->SetComponent(RenderComponentId, render_comp);
+        yoshi_obj->SetComponent(PhysicsComponentId, phy_comp);
 
         objects.emplace_back(yoshi_obj);
     }

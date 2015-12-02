@@ -12,6 +12,7 @@ enum ComponentId
 {
     AIComponentId,
     RenderComponentId,
+    PhysicsComponentId,
     ComponentIdLast
 };
 
@@ -31,8 +32,6 @@ public:
     const Object* GetParent() const;
     Object* GetParent();
 
-    virtual AIComponent* AsAIComponent();
-    virtual RenderComponent* AsRenderComponent();
 };
 
 typedef std::shared_ptr<Component> ComponentPtr;

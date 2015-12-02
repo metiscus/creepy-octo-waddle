@@ -17,7 +17,7 @@ public:
     template<typename T>
     std::shared_ptr<T> GetComponent()
     {
-        return std::dynamic_pointer_cast<T>(components_[T::GetComponentId()]);
+        return std::static_pointer_cast<T>(components_[T::GetComponentId()]);
     }
 
     const Vector2& GetPosition() const;

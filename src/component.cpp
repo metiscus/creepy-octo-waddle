@@ -25,13 +25,3 @@ const Object* Component::GetParent() const
 {
     return parent_;
 }
-
-AIComponent* Component::AsAIComponent()
-{
-    return nullptr;
-}
-
-RenderComponent* Component::AsRenderComponent()
-{
-    return nullptr;
-}
