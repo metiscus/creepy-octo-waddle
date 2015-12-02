@@ -79,18 +79,29 @@ int main()
             ai_comp->SetGoalPosition(Vector2(circle_radius * cos(mytheta), circle_radius * sin(mytheta)));
             obj->Update(frame);
 
+            auto physics_comp = obj->GetComponent<PhysicsComponent>();
+            Vector2 velocity = physics_comp->GetVelocity();
+            velocity.Normalize();
+
             auto render_comp = obj->GetComponent<RenderComponent>();
             auto drawables = render_comp->GetDrawables();
-            if(mytheta > 0.0 && mytheta < 3.15159)
+            if(acos(velocity.Dot(Vector2(0.0, 1.0)) <= 0.5 * M_PI_2))
             {
-                //drawables[0]->SetWidth(-64.0);
-                drawables[0]->SetAnimation(1);
+                drawables[0]->SetAnimation(3);
+            }
+            else if(acos(velocity.Dot(Vector2(0.0, -1.0)) <= 0.5 * M_PI_2))
+            {
+                drawables[0]->SetAnimation(2);
+            }
+            else if (velocity.x > 0)
+            {
+                drawables[0]->SetAnimation(0);
             }
             else
             {
-                //drawables[0]->SetWidth(64.0);
-                drawables[0]->SetAnimation(0);
+                drawables[0]->SetAnimation(1);
             }
+
         }
 
         render->Draw();
