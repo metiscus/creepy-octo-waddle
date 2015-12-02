@@ -32,6 +32,7 @@ GAME_SRC=\
 	src/render.cpp src/render.h\
 	src/rendercomponent.cpp src/rendercomponent.h\
 	src/drawable.cpp src/drawable.h\
+	src/log.cpp src/log.h\
 
 GAME_CPP= $(filter %.cpp,$(GAME_SRC))
 GAME_OBJ= $(GAME_CPP:.cpp=.o)

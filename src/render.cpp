@@ -1,11 +1,13 @@
 #include <glad/glad.h>
 #include "render.h"
+
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
+#include <fstream>
+#include "log.h"
 #include "rendercomponent.h"
 #include <string>
-#include <fstream>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include <glm/glm.hpp>
@@ -61,7 +63,7 @@ inline std::string FileToString(const std::string& filename)
 
 inline uint32_t BuildShader(uint32_t type, const std::string& filename)
 {
-    fprintf(stderr, "[render] : Loading shader %s\n", filename.c_str());
+    Log::Write(Log::RenderGroup, "Loading shader %s", filename.c_str());
 
     std::string shader_src = FileToString(filename);
     uint32_t shader = glCreateShader(type);
@@ -78,7 +80,8 @@ inline uint32_t BuildShader(uint32_t type, const std::string& filename)
        char *error_message = (char *)malloc(max_length);
        assert(error_message);
        glGetShaderInfoLog(shader, max_length, &max_length, error_message);
-       fprintf(stderr, "[render] : begin shader compile error:\n%s\n[render] : end shader compile error\n", error_message);
+       Log::Write(Log::RenderGroup, "begin shader compile error\n%s", error_message);
+       Log::Write(Log::RenderGroup, "end shader compile error");
        free(error_message);
        assert(false); // idiot! fix your code.
     }
@@ -133,7 +136,8 @@ void Render::InitGl()
         char *error_message = (char *)malloc(max_length);
         assert(error_message);
         glGetProgramInfoLog(program_, max_length, &max_length, error_message);
-        fprintf(stderr, "[render] : begin shader link error\n%s[render] : end shader link error\n", error_message);
+        Log::Write(Log::RenderGroup, "begin shader link error\n%s", error_message);
+        Log::Write(Log::RenderGroup, "end shader link error");
         free(error_message);
         assert(false); // idiot! fix your code.
     }
@@ -180,7 +184,7 @@ void Render::LoadTexture(uint32_t id)
     {
         struct textureinfo info;
         assert(files[id]);
-        fprintf(stderr, "[render] : loading %s as texture %d\n", files[id], id);
+        Log::Write(Log::RenderGroup, "loading %s as texture %d", files[id], id);
         uint8_t *data = stbi_load(files[id], (int*)&info.width, (int*)&info.height, (int*)&info.channels, 4);
         info.channels = 4;
         assert(data);
