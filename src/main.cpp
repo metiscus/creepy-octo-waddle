@@ -102,6 +102,11 @@ int main()
                 drawables[0]->SetAnimation(1);
             }
 
+            Vector2 position = obj->GetPosition();
+            drawables[0]->SetHeight( 64.0 - 16. * position.y / circle_radius );
+            drawables[0]->SetWidth( 64.0 - 16. * position.y / circle_radius );
+
+
         }
 
         render->Draw();
