@@ -41,7 +41,7 @@ Render::~Render()
     // clean-up sdl
     // clean-up textures
     // clean-up vao/vbos
-    assert(false); // don't remove until all cleanup tasks finished
+    //assert(false); // don't remove until all cleanup tasks finished
 }
 
 inline std::string FileToString(const std::string& filename)

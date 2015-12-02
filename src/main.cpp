@@ -14,8 +14,8 @@ int main()
 
     DrawablePtr yoshi (new Drawable());
     yoshi->SetTexture(1);
-    yoshi->SetWidth(100.0);
-    yoshi->SetHeight(100.0);
+    yoshi->SetWidth(64.0);
+    yoshi->SetHeight(64.0);
     yoshi->SetLayer(Render::LayerBg);
 
     std::shared_ptr<RenderComponent> render_comp (new RenderComponent());
@@ -28,13 +28,13 @@ int main()
     ai_world->AddComponent(ai_comp);
 
     std::shared_ptr<Object> yoshi_obj(new Object());
-    yoshi_obj->SetPosition(Vector2(0, 0));
+    yoshi_obj->SetPosition(Vector2(120, 120));
     yoshi_obj->SetComponent(AIComponentId, ai_comp);
     yoshi_obj->SetComponent(RenderComponentId, render_comp);
 
 
     float theta = 0.0f;
-    uint32_t rate = 6;
+    uint32_t rate = 4;
     uint64_t frame = 0;
 
     bool quit = false;
@@ -62,7 +62,7 @@ int main()
         yoshi_obj->Update(frame);
         yoshi->SetFrame((frame / rate) % 8);
         render->Draw();
-        fprintf(stderr, "frame: %u\n", (frame / rate) % 8);
+        //fprintf(stderr, "frame: %u\n", (frame / rate) % 8);
 
         theta += 0.01;
 
