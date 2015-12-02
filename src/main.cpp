@@ -79,11 +79,13 @@ int main()
             auto drawables = render_comp->GetDrawables();
             if(mytheta > 0.0 && mytheta < 3.15159)
             {
-                drawables[0]->SetWidth(-64.0);
+                //drawables[0]->SetWidth(-64.0);
+                drawables[0]->SetAnimation(1);
             }
             else
             {
-                drawables[0]->SetWidth(64.0);
+                //drawables[0]->SetWidth(64.0);
+                drawables[0]->SetAnimation(0);
             }
         }
 
