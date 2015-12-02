@@ -1,3 +1,4 @@
+#include <cassert>
 #include "rendercomponent.h"
 #include "object.h"
 
@@ -20,6 +21,7 @@ const std::vector<DrawablePtr>& RenderComponent::GetDrawables() const
 void RenderComponent::Update(uint64_t frame)
 {
     (void)frame;
+    assert(GetParent());
     const Vector2& position = GetParent()->GetPosition();
     for(auto drawable : drawables_)
     {

@@ -1,11 +1,14 @@
 #include <cstdio>
 #include <memory>
+#include "aicomponent.h"
+#include "aiworld.h"
 #include "object.h"
 #include "render.h"
 #include "rendercomponent.h"
 
 int main()
 {
+    std::shared_ptr<AIWorld> ai_world (new AIWorld());
     std::shared_ptr<Render> render (new Render());
 
     DrawablePtr yoshi (new Drawable());
@@ -16,14 +19,21 @@ int main()
 
     std::shared_ptr<RenderComponent> render_comp (new RenderComponent());
     render_comp->AddDrawable(yoshi);
-    std::shared_ptr<Object> yoshi_obj(new Object());
-    std::shared_ptr<Component> comp(render_comp.get());
-    yoshi_obj->SetComponent(RenderComponentId, render_comp);
-    yoshi_obj->SetPosition(Vector2(0, 0));
     render->AddComponent(render_comp);
 
+    std::shared_ptr<AIComponent> ai_comp(new AIComponent());
+    ai_comp->SetGoalPosition(Vector2(100.0, 100.0));
+    ai_comp->SetMaxSpeed(1.);
+    ai_world->AddComponent(ai_comp);
+
+    std::shared_ptr<Object> yoshi_obj(new Object());
+    yoshi_obj->SetPosition(Vector2(0, 0));
+    yoshi_obj->SetComponent(AIComponentId, ai_comp);
+    yoshi_obj->SetComponent(RenderComponentId, render_comp);
+
+
     uint32_t rate = 10;
-    uint64_t frame;
+    uint64_t frame = 0;
 
     bool quit = false;
     while(!quit)
@@ -45,6 +55,7 @@ int main()
             }
         }
 
+        yoshi_obj->Update(frame);
         yoshi->SetFrame((frame / rate) % 8);
         render->Draw();
         fprintf(stderr, "frame: %u\n", (frame / rate) % 8);

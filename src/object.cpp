@@ -12,6 +12,7 @@ Object::~Object()
 void Object::SetComponent(const ComponentId& id, const ComponentPtr& comp)
 {
     components_[id] = comp;
+    comp->SetParent(this);
 }
 
 ComponentPtr Object::GetComponent(const ComponentId& id)
@@ -33,9 +34,9 @@ void Object::Update(uint64_t frame)
 {
     for(auto comp : components_)
     {
-	if(comp)
-	{
-	    comp->Update(frame);
-	}
+    	if(comp)
+    	{
+    	    comp->Update(frame);
+    	}
     }
 }
