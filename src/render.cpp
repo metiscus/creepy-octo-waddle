@@ -98,7 +98,7 @@ void Render::InitGl()
         glEnableVertexAttribArray(0);
 
         // tile id {x,y}
-        glVertexAttribPointer(1, 2, GL_UNSIGNED_INT, GL_FALSE, stride, (void*)(sizeof(float) * 4));
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(float) * 4));
         glEnableVertexAttribArray(1);
     }
 
@@ -116,6 +116,7 @@ void Render::InitGl()
     glAttachShader(program_, fragment_shader);
     glBindAttribLocation(program_, 0, "position");
     glBindAttribLocation(program_, 1, "tile_id");
+
     glBindFragDataLocation(program_, 0, "frag_color");
 
     glLinkProgram(program_);
@@ -301,15 +302,15 @@ void Render::Draw()
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
     // sort components into bins based on layer
-    std::array<std::vector<Drawable>, LayerCount> bins;
+    std::array<std::vector<DrawablePtr>, LayerCount> bins;
     for(auto comp : components_)
     {
         RenderComponent *render_comp = comp->AsRenderComponent();
         assert(render_comp); // this should always pass
-        const std::vector<Drawable>& drawables = render_comp->GetDrawables();
+        const std::vector<DrawablePtr>& drawables = render_comp->GetDrawables();
         for(auto drawable : drawables)
         {
-            bins[drawable.GetLayer()].push_back(drawable);
+            bins[drawable->GetLayer()].push_back(drawable);
         }
     }
 
@@ -317,14 +318,14 @@ void Render::Draw()
     std::vector<float> buffer_data;
     buffer_data.reserve(6 * components_.size());
 
-    std::unordered_map<uint32_t, std::vector<Drawable> > tex_map;
+    std::unordered_map<uint32_t, std::vector<DrawablePtr> > tex_map;
     // render the layers
     for(uint32_t layer_id = LayerBg; layer_id < LayerCount; ++layer_id)
     {
         // sort drawables based on texture
         for(auto drawable : bins[layer_id])
         {
-            tex_map[drawable.GetTexture()].emplace_back(drawable);
+            tex_map[drawable->GetTexture()].emplace_back(drawable);
         }
 
         // draw each drawable
@@ -341,25 +342,25 @@ void Render::Draw()
 
             for(auto drawable : itr.second)
             {
-                triangle_generator gen(drawable.GetPosition(), drawable.GetWidth(), drawable.GetHeight());
+                triangle_generator gen(drawable->GetPosition(), drawable->GetWidth(), drawable->GetHeight());
                 gen(buffer_data);
                 buffer_data.push_back(0);
-                buffer_data.push_back(drawable.GetFrame());
+                buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
                 buffer_data.push_back(0);
-                buffer_data.push_back(drawable.GetFrame());
+                buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
                 buffer_data.push_back(0);
-                buffer_data.push_back(drawable.GetFrame());
+                buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
                 buffer_data.push_back(0);
-                buffer_data.push_back(drawable.GetFrame());
+                buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
                 buffer_data.push_back(0);
-                buffer_data.push_back(drawable.GetFrame());
+                buffer_data.push_back(drawable->GetFrame());
                 gen(buffer_data);
                 buffer_data.push_back(0);
-                buffer_data.push_back(drawable.GetFrame());
+                buffer_data.push_back(drawable->GetFrame());
                 ++drawable_count;
             }
 

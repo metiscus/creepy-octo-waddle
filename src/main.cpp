@@ -8,11 +8,11 @@ int main()
 {
     std::shared_ptr<Render> render (new Render());
 
-    Drawable yoshi;
-    yoshi.SetTexture(1);
-    yoshi.SetWidth(150.0);
-    yoshi.SetHeight(150.0);
-    yoshi.SetLayer(Render::LayerBg);
+    DrawablePtr yoshi (new Drawable());
+    yoshi->SetTexture(1);
+    yoshi->SetWidth(150.0);
+    yoshi->SetHeight(150.0);
+    yoshi->SetLayer(Render::LayerBg);
 
     std::shared_ptr<RenderComponent> render_comp (new RenderComponent());
     render_comp->AddDrawable(yoshi);
@@ -22,7 +22,8 @@ int main()
     yoshi_obj->SetPosition(Vector2(0, 0));
     render->AddComponent(render_comp);
 
-    uint32_t rate = 30;
+    uint32_t rate = 10;
+    uint64_t frame;
 
     bool quit = false;
     while(!quit)
@@ -44,8 +45,11 @@ int main()
             }
         }
 
+        yoshi->SetFrame((frame / rate) % 8);
         render->Draw();
-        ++rate;
+        fprintf(stderr, "frame: %u\n", (frame / rate) % 8);
+
+        ++frame;
     }
 
     return 0;

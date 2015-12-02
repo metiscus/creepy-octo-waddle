@@ -9,13 +9,13 @@
 
 class RenderComponent : public Component
 {
-    std::vector<Drawable> drawables_;
+    std::vector<DrawablePtr> drawables_;
 public:
     RenderComponent();
     virtual ~RenderComponent() = default;
 
-    void AddDrawable(const Drawable& drawable);
-    const std::vector<Drawable>& GetDrawables() const;
+    void AddDrawable(const DrawablePtr& drawable);
+    const std::vector<DrawablePtr>& GetDrawables() const;
 
     virtual void Update(uint64_t frame);
     virtual RenderComponent* AsRenderComponent();

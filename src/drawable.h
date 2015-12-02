@@ -2,6 +2,7 @@
 #define DRAWABLE_H_INCLUDED
 
 #include <cstdio>
+#include <memory>
 #include "render.h"
 #include "vector.h"
 
@@ -35,5 +36,7 @@ public:
     const Vector2& GetPosition() const;
     const Vector2& GetOffset() const;
 };
+
+typedef std::shared_ptr<Drawable> DrawablePtr;
 
 #endif // DRAWABLE_H_INCLUDED

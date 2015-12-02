@@ -7,12 +7,12 @@ RenderComponent::RenderComponent()
     ;
 }
 
-void RenderComponent::AddDrawable(const Drawable& drawable)
+void RenderComponent::AddDrawable(const DrawablePtr& drawable)
 {
     drawables_.emplace_back(drawable);
 }
 
-const std::vector<Drawable>& RenderComponent::GetDrawables() const
+const std::vector<DrawablePtr>& RenderComponent::GetDrawables() const
 {
     return drawables_;
 }
@@ -23,7 +23,7 @@ void RenderComponent::Update(uint64_t frame)
     const Vector2& position = GetParent()->GetPosition();
     for(auto drawable : drawables_)
     {
-        drawable.SetPosition(position);
+        drawable->SetPosition(position);
     }
 }
 
