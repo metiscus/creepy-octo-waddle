@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cmath>
 #include <memory>
 #include "aicomponent.h"
 #include "aiworld.h"
@@ -13,8 +14,8 @@ int main()
 
     DrawablePtr yoshi (new Drawable());
     yoshi->SetTexture(1);
-    yoshi->SetWidth(150.0);
-    yoshi->SetHeight(150.0);
+    yoshi->SetWidth(100.0);
+    yoshi->SetHeight(100.0);
     yoshi->SetLayer(Render::LayerBg);
 
     std::shared_ptr<RenderComponent> render_comp (new RenderComponent());
@@ -22,7 +23,7 @@ int main()
     render->AddComponent(render_comp);
 
     std::shared_ptr<AIComponent> ai_comp(new AIComponent());
-    ai_comp->SetGoalPosition(Vector2(100.0, 100.0));
+    ai_comp->SetGoalPosition(Vector2(120.0, 120.0));
     ai_comp->SetMaxSpeed(1.);
     ai_world->AddComponent(ai_comp);
 
@@ -32,7 +33,8 @@ int main()
     yoshi_obj->SetComponent(RenderComponentId, render_comp);
 
 
-    uint32_t rate = 10;
+    float theta = 0.0f;
+    uint32_t rate = 6;
     uint64_t frame = 0;
 
     bool quit = false;
@@ -55,10 +57,24 @@ int main()
             }
         }
 
+        ai_comp->SetGoalPosition(Vector2(120.0 * cos(theta), 120.0 * sin(theta)));
+
         yoshi_obj->Update(frame);
         yoshi->SetFrame((frame / rate) % 8);
         render->Draw();
         fprintf(stderr, "frame: %u\n", (frame / rate) % 8);
+
+        theta += 0.01;
+
+        theta = fmod(theta, 2*3.14159);
+        if(theta > 0.0 && theta < 3.15159)
+        {
+            yoshi->SetWidth(-100.0);
+        }
+        else
+        {
+            yoshi->SetWidth(100.0);
+        }
 
         ++frame;
     }
