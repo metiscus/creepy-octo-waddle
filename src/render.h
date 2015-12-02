@@ -31,6 +31,10 @@ private:
     std::array<uint32_t, LayerCount> vbos_;
 
     uint32_t bound_texture_;
+    uint32_t program_;
+    uint32_t view_uniform_;
+    uint32_t projection_uniform_;
+    uint32_t tile_size_uniform_;
 
     struct textureinfo
     {

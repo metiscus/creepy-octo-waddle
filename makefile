@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-g -Wall -Wextra -std=c++11 -Iextern/glad/include -L.
+CXXFLAGS=-g -Wall -Wextra -std=c++11 -Iextern/glad/include -Iextern -L.
 
 # rule for building .o from .cpp using dependencies
 %.o: %.cpp
@@ -31,6 +31,7 @@ GAME_SRC=\
 	src/aiworld.cpp src/aiworld.h\
 	src/render.cpp src/render.h\
 	src/rendercomponent.cpp src/rendercomponent.h\
+	src/drawable.cpp src/drawable.h\
 
 GAME_CPP= $(filter %.cpp,$(GAME_SRC))
 GAME_OBJ= $(GAME_CPP:.cpp=.o)

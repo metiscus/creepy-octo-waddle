@@ -9,6 +9,7 @@
 enum ComponentId
 {
     AIComponentId,
+    RenderComponentId,
     ComponentIdLast
 };
 
@@ -24,7 +25,7 @@ public:
     void SetPosition(const Vector2& position);
 
     void Update(uint64_t frame);
-    
+
 private:
     Vector2 position_;
     std::array<ComponentPtr, ComponentIdLast> components_;
