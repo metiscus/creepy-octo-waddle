@@ -74,7 +74,7 @@ int main()
         for(auto obj : objects)
         {
             auto ai_comp = obj->GetComponent<AIComponent>();
-            float mytheta = fmod(theta + 3.14159 * 2 / (float)yoshi_count * (float)(ii++), 2*3.14159);
+            float mytheta = fmod(theta + 3.14159 * 2.0 / (float)yoshi_count * (float)(ii++), 2.0*3.14159);
 
             ai_comp->SetGoalPosition(Vector2(circle_radius * cos(mytheta), circle_radius * sin(mytheta)));
             obj->Update(frame);

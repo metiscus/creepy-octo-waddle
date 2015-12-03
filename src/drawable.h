@@ -2,9 +2,14 @@
 #define DRAWABLE_H_INCLUDED
 
 #include <cstdio>
+#include <string>
 #include <memory>
 #include "render.h"
 #include "vector.h"
+
+class Drawable;
+
+typedef std::shared_ptr<Drawable> DrawablePtr;
 
 class Drawable
 {
@@ -21,6 +26,8 @@ class Drawable
 
 public:
     Drawable();
+
+    static DrawablePtr LoadFile(const std::string& filename);
 
     void SetTexture(uint32_t id);
     void SetFrame(uint32_t frame);
@@ -47,7 +54,5 @@ public:
 
     void Update(uint64_t frame);
 };
-
-typedef std::shared_ptr<Drawable> DrawablePtr;
 
 #endif // DRAWABLE_H_INCLUDED

@@ -1,6 +1,14 @@
 #include "drawable.h"
 #include "render.h"
 #include <cassert>
+#include <fstream>
+#include <string>
+#include <vector>
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#include <rapidxml/rapidxml.hpp>
+#pragma GCC diagnostic pop
 
 Drawable::Drawable()
 {
@@ -12,6 +20,37 @@ Drawable::Drawable()
     width_      = 0.f;
     height_     = 0.f;
     layer_      = Render::LayerDefault;
+}
+
+inline std::string FileToString(const std::string& filename)
+{
+    std::string ret;
+
+    std::ifstream infile(filename.c_str());
+    for(std::string line; std::getline(infile, line); )
+    {
+        ret += line + std::string("\n");
+    }
+    return ret;
+}
+
+DrawablePtr Drawable::LoadFile(const std::string& filename)
+{
+    DrawablePtr drawable(new Drawable());
+    using namespace rapidxml;
+
+    std::string xml_text_str = FileToString(filename);
+    std::vector<char> xml_text;
+    xml_text.resize(xml_text_str.length());
+    strcpy(&xml_text[0], xml_text_str.c_str());
+
+    xml_document<> doc;
+    doc.parse<0>(&xml_text[0]);
+
+    // read the document and populate the fields of the drawable here
+    //http://rapidxml.sourceforge.net/manual.html
+
+    return drawable;
 }
 
 void Drawable::SetTexture(uint32_t id)
