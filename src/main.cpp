@@ -16,8 +16,8 @@ int main()
     std::vector<std::shared_ptr<Object> > objects;
 
 
-    const float circle_radius = 250.0;
-    const int yoshi_count = 10;
+    const float circle_radius = 220.0;
+    const int yoshi_count = 32;
     for(int i=0; i<yoshi_count; ++i)
     {
         DrawablePtr yoshi (new Drawable());
@@ -105,8 +105,6 @@ int main()
             Vector2 position = obj->GetPosition();
             drawables[0]->SetHeight( 64.0 - 16. * position.y / circle_radius );
             drawables[0]->SetWidth( 64.0 - 16. * position.y / circle_radius );
-
-
         }
 
         render->Draw();
