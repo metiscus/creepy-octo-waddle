@@ -23,6 +23,7 @@ class Drawable
     Render::Layer layer_;
     Vector2 position_;
     Vector2 offset_;
+    bool is_transparent_;
 
 public:
     Drawable();
@@ -40,6 +41,7 @@ public:
     void SetLayer(Render::Layer layer);
     void SetPosition(const Vector2& position);
     void SetOffset(const Vector2& offset);
+    void SetIsTransparent(bool trans);
     uint32_t GetTexture() const;
     uint32_t GetFrame() const;
     uint32_t GetMaxFrame() const;
@@ -51,6 +53,7 @@ public:
     Render::Layer GetLayer() const;
     const Vector2& GetPosition() const;
     const Vector2& GetOffset() const;
+    bool GetIsTransparent() const;
 
     void Update(uint64_t frame);
 };

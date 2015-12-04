@@ -20,6 +20,7 @@ Drawable::Drawable()
     width_      = 0.f;
     height_     = 0.f;
     layer_      = Render::LayerDefault;
+    is_transparent_ = false;
 }
 
 inline std::string FileToString(const std::string& filename)
@@ -111,6 +112,11 @@ void Drawable::SetOffset(const Vector2& offset)
     offset_ = offset;
 }
 
+void Drawable::SetIsTransparent(bool trans)
+{
+    is_transparent_ = trans;
+}
+
 uint32_t Drawable::GetTexture() const
 {
     return texture_;
@@ -165,6 +171,11 @@ const Vector2& Drawable::GetPosition() const
 const Vector2& Drawable::GetOffset() const
 {
     return offset_;
+}
+
+bool Drawable::GetIsTransparent() const
+{
+    return is_transparent_;
 }
 
 void Drawable::Update(uint64_t frame)

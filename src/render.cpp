@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
+#include <queue>
 #include "log.h"
 #include "rendercomponent.h"
 #include <string>
@@ -99,7 +100,7 @@ void Render::InitGl()
         glBindBuffer(GL_ARRAY_BUFFER, vbos_[ii]);
 
         // point {x,y} uv{s,t}
-        uint32_t stride = 4 * sizeof(float) + 2 * sizeof(uint32_t);
+        uint32_t stride = 4 * sizeof(float) + 2 * sizeof(float);
         glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, stride, (void*)(0));
         glEnableVertexAttribArray(0);
 
@@ -168,6 +169,7 @@ void Render::InitGl()
     glBindSampler(0, sampler_uniform);
 
     glClearColor(0.f, 0.2f, 0.2f, 0.f);
+    glClearDepth(0.0);
 }
 
 void Render::LoadTexture(uint32_t id)
@@ -325,6 +327,13 @@ void Render::Draw()
     std::vector<float> buffer_data;
     buffer_data.reserve(6 * components_.size());
 
+    auto fnDrawableLess = [](DrawablePtr left, DrawablePtr right)
+    {
+        return left->GetPosition().y < right->GetPosition().y;
+    };
+
+
+
     std::unordered_map<uint32_t, std::vector<DrawablePtr> > tex_map;
     // render the layers
     for(uint32_t layer_id = LayerBg; layer_id < LayerCount; ++layer_id)
@@ -347,8 +356,16 @@ void Render::Draw()
                 ((float)textures_[itr.first].tile_height) / ((float)textures_[itr.first].height)
             );
 
+            std::priority_queue<DrawablePtr, std::vector<DrawablePtr>, decltype(fnDrawableLess)> transparents(fnDrawableLess);
+
             for(auto drawable : itr.second)
             {
+                transparents.push(drawable);
+            }
+
+            while(!transparents.empty())
+            {
+                auto drawable = transparents.top();
                 triangle_generator gen(drawable->GetPosition(), drawable->GetWidth(), drawable->GetHeight());
                 gen(buffer_data);
                 buffer_data.push_back(drawable->GetAnimation());
@@ -369,6 +386,8 @@ void Render::Draw()
                 buffer_data.push_back(drawable->GetAnimation());
                 buffer_data.push_back(drawable->GetFrame());
                 ++drawable_count;
+
+                 transparents.pop();
             }
 
             glBindVertexArray(vaos_[layer_id]);
