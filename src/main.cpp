@@ -8,10 +8,42 @@
 #include "render.h"
 #include "rendercomponent.h"
 
+std::shared_ptr<AIWorld> ai_world;
+std::shared_ptr<Render> render;
+
+void add_yoshi( std::vector<std::shared_ptr<Object> > &objects, int x, int y)
+{
+    DrawablePtr yoshi (new Drawable());
+    yoshi->SetTexture(1);
+    yoshi->SetWidth(64.0);
+    yoshi->SetHeight(64.0);
+    yoshi->SetMaxFrame(8);
+    yoshi->SetFrameRate(4);
+    yoshi->SetLayer(Render::LayerBg);
+
+    std::shared_ptr<RenderComponent> render_comp (new RenderComponent());
+    render_comp->AddDrawable(yoshi);
+    render->AddComponent(render_comp);
+
+    std::shared_ptr<AIComponent> ai_comp(new AIComponent());
+    ai_comp->SetMaxSpeed(3.5);
+    ai_world->AddComponent(ai_comp);
+
+    std::shared_ptr<PhysicsComponent> phy_comp(new PhysicsComponent());
+
+    std::shared_ptr<Object> yoshi_obj(new Object());
+    yoshi_obj->SetPosition(Vector2(x, y));
+    yoshi_obj->SetComponent(AIComponentId, ai_comp);
+    yoshi_obj->SetComponent(RenderComponentId, render_comp);
+    yoshi_obj->SetComponent(PhysicsComponentId, phy_comp);
+
+    objects.emplace_back(yoshi_obj);
+}
+
 int main()
 {
-    std::shared_ptr<AIWorld> ai_world (new AIWorld());
-    std::shared_ptr<Render> render (new Render());
+    ai_world = std::make_shared<AIWorld>();//(new AIWorld());
+    render = std::make_shared<Render>();//(new Render());
 
     std::vector<std::shared_ptr<Object> > objects;
 
@@ -20,31 +52,7 @@ int main()
     const int yoshi_count = 32;
     for(int i=0; i<yoshi_count; ++i)
     {
-        DrawablePtr yoshi (new Drawable());
-        yoshi->SetTexture(1);
-        yoshi->SetWidth(64.0);
-        yoshi->SetHeight(64.0);
-        yoshi->SetMaxFrame(8);
-        yoshi->SetFrameRate(4);
-        yoshi->SetLayer(Render::LayerBg);
-
-        std::shared_ptr<RenderComponent> render_comp (new RenderComponent());
-        render_comp->AddDrawable(yoshi);
-        render->AddComponent(render_comp);
-
-        std::shared_ptr<AIComponent> ai_comp(new AIComponent());
-        ai_comp->SetMaxSpeed(3.5);
-        ai_world->AddComponent(ai_comp);
-
-        std::shared_ptr<PhysicsComponent> phy_comp(new PhysicsComponent());
-
-        std::shared_ptr<Object> yoshi_obj(new Object());
-        yoshi_obj->SetPosition(Vector2(200, 200));
-        yoshi_obj->SetComponent(AIComponentId, ai_comp);
-        yoshi_obj->SetComponent(RenderComponentId, render_comp);
-        yoshi_obj->SetComponent(PhysicsComponentId, phy_comp);
-
-        objects.emplace_back(yoshi_obj);
+        add_yoshi(objects, 200, 200);
     }
 
     float theta = 0.0f;
@@ -66,6 +74,7 @@ int main()
             }
             //If user clicks the mouse
             if (e.type == SDL_MOUSEBUTTONDOWN){
+                add_yoshi(objects,200, 200);
                 //quit = true;
             }
         }
@@ -74,7 +83,7 @@ int main()
         for(auto obj : objects)
         {
             auto ai_comp = obj->GetComponent<AIComponent>();
-            float mytheta = fmod(theta + 3.14159 * 2.0 / (float)yoshi_count * (float)(ii++), 2.0*3.14159);
+            float mytheta = fmod(theta + 3.14159 * 2.0 / (float)objects.size() * (float)(ii++), 2.0*3.14159);
 
             ai_comp->SetGoalPosition(Vector2(circle_radius * cos(mytheta), circle_radius * sin(mytheta)));
             obj->Update(frame);
