@@ -27,6 +27,7 @@ class Drawable
 
 public:
     Drawable();
+    virtual ~Drawable() = default;
 
     static DrawablePtr LoadFile(const std::string& filename);
 
@@ -56,6 +57,8 @@ public:
     bool GetIsTransparent() const;
 
     void Update(uint64_t frame);
+
+    virtual int32_t GetGeometry(std::vector<float>& vbo);
 };
 
 #endif // DRAWABLE_H_INCLUDED

@@ -245,67 +245,6 @@ void Render::BindTexture(uint32_t id)
     bound_texture_ = id;
 }
 
-struct triangle_generator
-{
-    triangle_generator(Vector2 c, float w, float h)
-        : vert(0)
-        , center(c)
-        , h_width(0.5f * w)
-        , h_height(0.5f * h)
-    { }
-
-    int vert;
-    Vector2 center;
-    float h_width;
-    float h_height;
-
-    inline void operator()(std::vector<float>& data)
-    {
-        switch(vert)
-        {
-            case 0:
-                data.push_back(center.x - h_width);
-                data.push_back(center.y - h_height);
-                data.push_back(0.0f);
-                data.push_back(0.0f);
-                break;
-            case 1:
-                data.push_back(center.x + h_width);
-                data.push_back(center.y - h_height);
-                data.push_back(1.0f);
-                data.push_back(0.0f);
-                break;
-            case 2:
-                data.push_back(center.x - h_width);
-                data.push_back(center.y + h_height);
-                data.push_back(0.0f);
-                data.push_back(1.0f);
-                break;
-            case 3:
-                data.push_back(center.x - h_width);
-                data.push_back(center.y + h_height);
-                data.push_back(0.0f);
-                data.push_back(1.0f);
-                break;
-            case 4:
-                data.push_back(center.x + h_width);
-                data.push_back(center.y - h_height);
-                data.push_back(1.0f);
-                data.push_back(0.0f);
-                break;
-            case 5:
-                data.push_back(center.x + h_width);
-                data.push_back(center.y + h_height);
-                data.push_back(1.0f);
-                data.push_back(1.0f);
-                break;
-            default:
-                assert(false); // idiot!
-        }
-        ++vert;
-    }
-};
-
 void Render::Draw()
 {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -331,8 +270,6 @@ void Render::Draw()
     {
         return left->GetPosition().y < right->GetPosition().y;
     };
-
-
 
     std::unordered_map<uint32_t, std::vector<DrawablePtr> > tex_map;
     // render the layers
@@ -366,34 +303,14 @@ void Render::Draw()
             while(!transparents.empty())
             {
                 auto drawable = transparents.top();
-                triangle_generator gen(drawable->GetPosition(), drawable->GetWidth(), drawable->GetHeight());
-                gen(buffer_data);
-                buffer_data.push_back(drawable->GetAnimation());
-                buffer_data.push_back(drawable->GetFrame());
-                gen(buffer_data);
-                buffer_data.push_back(drawable->GetAnimation());
-                buffer_data.push_back(drawable->GetFrame());
-                gen(buffer_data);
-                buffer_data.push_back(drawable->GetAnimation());
-                buffer_data.push_back(drawable->GetFrame());
-                gen(buffer_data);
-                buffer_data.push_back(drawable->GetAnimation());
-                buffer_data.push_back(drawable->GetFrame());
-                gen(buffer_data);
-                buffer_data.push_back(drawable->GetAnimation());
-                buffer_data.push_back(drawable->GetFrame());
-                gen(buffer_data);
-                buffer_data.push_back(drawable->GetAnimation());
-                buffer_data.push_back(drawable->GetFrame());
-                ++drawable_count;
-
-                 transparents.pop();
+                drawable_count += drawable->GetGeometry(buffer_data);
+                transparents.pop();
             }
 
             glBindVertexArray(vaos_[layer_id]);
             glBindBuffer(GL_ARRAY_BUFFER, vbos_[layer_id]);
             glBufferData(GL_ARRAY_BUFFER, buffer_data.size() * sizeof(float), &buffer_data[0], GL_STATIC_DRAW);
-            glDrawArrays(GL_TRIANGLES, 0, 6 * drawable_count);
+            glDrawArrays(GL_TRIANGLES, 0, drawable_count);
         }
     }
 

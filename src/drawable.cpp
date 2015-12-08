@@ -189,3 +189,88 @@ void Drawable::Update(uint64_t frame)
         frame_ = max_frame_;
     }
 }
+
+struct triangle_generator
+{
+    triangle_generator(Vector2 c, float w, float h)
+        : vert(0)
+        , center(c)
+        , h_width(0.5f * w)
+        , h_height(0.5f * h)
+    { }
+
+    int vert;
+    Vector2 center;
+    float h_width;
+    float h_height;
+
+    inline void operator()(std::vector<float>& data)
+    {
+        switch(vert)
+        {
+            case 0:
+                data.push_back(center.x - h_width);
+                data.push_back(center.y - h_height);
+                data.push_back(0.0f);
+                data.push_back(0.0f);
+                break;
+            case 1:
+                data.push_back(center.x + h_width);
+                data.push_back(center.y - h_height);
+                data.push_back(1.0f);
+                data.push_back(0.0f);
+                break;
+            case 2:
+                data.push_back(center.x - h_width);
+                data.push_back(center.y + h_height);
+                data.push_back(0.0f);
+                data.push_back(1.0f);
+                break;
+            case 3:
+                data.push_back(center.x - h_width);
+                data.push_back(center.y + h_height);
+                data.push_back(0.0f);
+                data.push_back(1.0f);
+                break;
+            case 4:
+                data.push_back(center.x + h_width);
+                data.push_back(center.y - h_height);
+                data.push_back(1.0f);
+                data.push_back(0.0f);
+                break;
+            case 5:
+                data.push_back(center.x + h_width);
+                data.push_back(center.y + h_height);
+                data.push_back(1.0f);
+                data.push_back(1.0f);
+                break;
+            default:
+                assert(false); // idiot!
+        }
+        ++vert;
+    }
+};
+
+int32_t Drawable::GetGeometry(std::vector<float>& buffer_data)
+{
+    triangle_generator gen(GetPosition(), GetWidth(), GetHeight());
+    gen(buffer_data);
+    buffer_data.push_back(GetAnimation());
+    buffer_data.push_back(GetFrame());
+    gen(buffer_data);
+    buffer_data.push_back(GetAnimation());
+    buffer_data.push_back(GetFrame());
+    gen(buffer_data);
+    buffer_data.push_back(GetAnimation());
+    buffer_data.push_back(GetFrame());
+    gen(buffer_data);
+    buffer_data.push_back(GetAnimation());
+    buffer_data.push_back(GetFrame());
+    gen(buffer_data);
+    buffer_data.push_back(GetAnimation());
+    buffer_data.push_back(GetFrame());
+    gen(buffer_data);
+    buffer_data.push_back(GetAnimation());
+    buffer_data.push_back(GetFrame());
+    return 6; // number of verts
+}
