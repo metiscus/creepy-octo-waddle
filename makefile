@@ -1,15 +1,9 @@
 CXX=g++
 CXXFLAGS=-g -Wall -Wextra -Wshadow -std=c++11 -Iextern/glad/include -Iextern -L.
 
-# rule for building .o from .cpp using dependencies
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $*.cpp -o $*.o
-	$(CXX) -MM $(CXXFLAGS) $*.cpp > $*.d
-	@mv -f $*.d $*.d.tmp
-	@sed -e 's|.*:|$*.o:|' < $*.d.tmp > $*.d
-	@sed -e 's/.*://' -e 's/\\$$//' < $*.d.tmp | fmt -1 | \
-	  sed -e 's/^ *//' -e 's/$$/:/' >> $*.d
-	@rm -f $*.d.tmp
+	$(CXX) -MM -MD -MT "$*.o" $(CXXFLAGS) $*.cpp -o $*.d
 
 SDL_CFLAGS=`pkg-config --cflags sdl2`
 SDL_LDFLAGS=`pkg-config --libs sdl2`
@@ -38,7 +32,9 @@ GAME_SRC=\
 GAME_CPP= $(filter %.cpp,$(GAME_SRC))
 GAME_OBJ= $(GAME_CPP:.cpp=.o)
 
-game: $(GAME_OBJ) $(GAME_SRC) $(GAME_CPP:.cpp=.d) libglad.a
+-include $(GAME_OBJ:.o=.d)
+
+game: $(GAME_OBJ) $(GAME_SRC) libglad.a
 	$(CXX) $(CXXFLAGS) -o game $(GAME_OBJ) $(SDL_LDFLAGS) -lglad -ldl
 
 clean:
