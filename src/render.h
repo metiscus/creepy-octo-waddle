@@ -18,7 +18,7 @@ public:
     {
         LayerDefault = 0,
         LayerBg = LayerDefault,
-        //LayerFg,
+        LayerFg,
         //LayerUi,
         LayerCount
     };

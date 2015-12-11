@@ -7,7 +7,7 @@
 class PhysicsComponent : public Component
 {
     bool is_static_;
-    Vector2 velocity_;
+    Vector velocity_;
 
 public:
     PhysicsComponent();
@@ -16,9 +16,9 @@ public:
     static ComponentId GetComponentId();
 
     void SetIsStatic(bool is_static);
-    void SetVelocity(const Vector2& velocity);
-    void AddVelocity(const Vector2& velocity);
-    const Vector2& GetVelocity() const;
+    void SetVelocity(const Vector& velocity);
+    void AddVelocity(const Vector& velocity);
+    const Vector& GetVelocity() const;
     bool GetIsStatic() const;
 
     virtual void Update(uint64_t frame);

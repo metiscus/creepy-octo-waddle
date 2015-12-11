@@ -15,12 +15,12 @@ void Object::SetComponent(const ComponentId& id, const ComponentPtr& comp)
     comp->SetParent(this);
 }
 
-const Vector2& Object::GetPosition() const
+const Vector& Object::GetPosition() const
 {
     return position_;
 }
 
-void Object::SetPosition(const Vector2& position)
+void Object::SetPosition(const Vector& position)
 {
     position_ = position;
 }

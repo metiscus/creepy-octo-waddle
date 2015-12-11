@@ -20,13 +20,13 @@ public:
         return std::static_pointer_cast<T>(components_[T::GetComponentId()]);
     }
 
-    const Vector2& GetPosition() const;
-    void SetPosition(const Vector2& position);
+    const Vector& GetPosition() const;
+    void SetPosition(const Vector& position);
 
     void Update(uint64_t frame);
 
 private:
-    Vector2 position_;
+    Vector position_;
     std::array<ComponentPtr, ComponentIdLast> components_;
 };
 

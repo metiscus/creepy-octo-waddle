@@ -102,12 +102,12 @@ void Drawable::SetLayer(Render::Layer layer)
     layer_ = layer;
 }
 
-void Drawable::SetPosition(const Vector2& position)
+void Drawable::SetPosition(const Vector& position)
 {
     position_ = position;
 }
 
-void Drawable::SetOffset(const Vector2& offset)
+void Drawable::SetOffset(const Vector& offset)
 {
     offset_ = offset;
 }
@@ -163,12 +163,12 @@ Render::Layer Drawable::GetLayer() const
     return layer_;
 }
 
-const Vector2& Drawable::GetPosition() const
+const Vector& Drawable::GetPosition() const
 {
     return position_;
 }
 
-const Vector2& Drawable::GetOffset() const
+const Vector& Drawable::GetOffset() const
 {
     return offset_;
 }
@@ -192,7 +192,7 @@ void Drawable::Update(uint64_t frame)
 
 struct triangle_generator
 {
-    triangle_generator(Vector2 c, float w, float h)
+    triangle_generator(Vector c, float w, float h)
         : vert(0)
         , center(c)
         , h_width(0.5f * w)
@@ -200,7 +200,7 @@ struct triangle_generator
     { }
 
     int vert;
-    Vector2 center;
+    Vector center;
     float h_width;
     float h_height;
 

@@ -14,7 +14,7 @@ public:
     AIWorld() = default;
     ~AIWorld() = default;
 
-    std::vector<ComponentPtr> QueryRange(const Vector2& center, float range);
+    std::vector<ComponentPtr> QueryRange(const Vector& center, float range);
 
 };
 

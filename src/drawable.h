@@ -21,8 +21,8 @@ class Drawable
     float width_;
     float height_;
     Render::Layer layer_;
-    Vector2 position_;
-    Vector2 offset_;
+    Vector position_;
+    Vector offset_;
     bool is_transparent_;
 
 public:
@@ -40,8 +40,8 @@ public:
     void SetHeight(float height);
     void SetSize(float width, float height);
     void SetLayer(Render::Layer layer);
-    void SetPosition(const Vector2& position);
-    void SetOffset(const Vector2& offset);
+    void SetPosition(const Vector& position);
+    void SetOffset(const Vector& offset);
     void SetIsTransparent(bool trans);
     uint32_t GetTexture() const;
     uint32_t GetFrame() const;
@@ -52,8 +52,8 @@ public:
     float GetHeight() const;
     void GetSize(float& width, float& height) const;
     Render::Layer GetLayer() const;
-    const Vector2& GetPosition() const;
-    const Vector2& GetOffset() const;
+    const Vector& GetPosition() const;
+    const Vector& GetOffset() const;
     bool GetIsTransparent() const;
 
     void Update(uint64_t frame);

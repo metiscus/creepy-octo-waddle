@@ -25,8 +25,8 @@ void AIComponent::Update(uint64_t frame)
     // if not at the goal position, move towards it
     if(fabs(max_speed_-0.0001) > 0)
     {
-        const Vector2& position = GetParent()->GetPosition();
-        Vector2 toGoal = (goal_position_ - position);
+        const Vector& position = GetParent()->GetPosition();
+        Vector toGoal = (goal_position_ - position);
         float distanceToGoal = toGoal.Length();
         float speed = max_speed_;
         if(distanceToGoal < max_speed_)
@@ -38,7 +38,7 @@ void AIComponent::Update(uint64_t frame)
     }
 }
 
-void AIComponent::SetGoalPosition(const Vector2& position)
+void AIComponent::SetGoalPosition(const Vector& position)
 {
     goal_position_ = position;
 }
@@ -48,7 +48,7 @@ void AIComponent::SetMaxSpeed(float speed)
     max_speed_ = speed;
 }
 
-const Vector2& AIComponent::GetGoalPosition() const
+const Vector& AIComponent::GetGoalPosition() const
 {
     return goal_position_;
 }

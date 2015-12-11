@@ -32,7 +32,7 @@ void add_yoshi( std::vector<std::shared_ptr<Object> > &objects, int x, int y)
     std::shared_ptr<PhysicsComponent> phy_comp(new PhysicsComponent());
 
     std::shared_ptr<Object> yoshi_obj(new Object());
-    yoshi_obj->SetPosition(Vector2(x, y));
+    yoshi_obj->SetPosition(Vector(x, y));
     yoshi_obj->SetComponent(AIComponentId, ai_comp);
     yoshi_obj->SetComponent(RenderComponentId, render_comp);
     yoshi_obj->SetComponent(PhysicsComponentId, phy_comp);
@@ -85,20 +85,20 @@ int main()
             auto ai_comp = obj->GetComponent<AIComponent>();
             float mytheta = fmod(theta + 3.14159 * 2.0 / (float)objects.size() * (float)(ii++), 2.0*3.14159);
 
-            ai_comp->SetGoalPosition(Vector2(circle_radius * cos(mytheta), circle_radius * sin(mytheta)));
+            ai_comp->SetGoalPosition(Vector(circle_radius * cos(mytheta), circle_radius * sin(mytheta)));
             obj->Update(frame);
 
             auto physics_comp = obj->GetComponent<PhysicsComponent>();
-            Vector2 velocity = physics_comp->GetVelocity();
+            Vector velocity = physics_comp->GetVelocity();
             velocity.Normalize();
 
             auto render_comp = obj->GetComponent<RenderComponent>();
             auto drawables = render_comp->GetDrawables();
-            if(acos(velocity.Dot(Vector2(0.0, 1.0)) <= 0.5 * M_PI_2))
+            if(acos(velocity.Dot(Vector(0.0, 1.0)) <= 0.5 * M_PI_2))
             {
                 drawables[0]->SetAnimation(3);
             }
-            else if(acos(velocity.Dot(Vector2(0.0, -1.0)) <= 0.5 * M_PI_2))
+            else if(acos(velocity.Dot(Vector(0.0, -1.0)) <= 0.5 * M_PI_2))
             {
                 drawables[0]->SetAnimation(2);
             }
@@ -111,7 +111,7 @@ int main()
                 drawables[0]->SetAnimation(1);
             }
 
-            Vector2 position = obj->GetPosition();
+            Vector position = obj->GetPosition();
             drawables[0]->SetHeight( 64.0 - 16. * position.y / circle_radius );
             drawables[0]->SetWidth( 64.0 - 16. * position.y / circle_radius );
         }

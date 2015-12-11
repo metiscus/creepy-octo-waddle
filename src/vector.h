@@ -3,101 +3,108 @@
 
 #include <cmath>
 
-class Vector2
+class Vector
 {
 public:
     float x;
     float y;
+    float z;
 
-    Vector2(float ix = 0.f, float iy = 0.f)
+    Vector(float ix = 0.f, float iy = 0.f,  float iz = 0.f)
     : x(ix)
-    , y(iy) { }
+    , y(iy)
+    , z(iz) { }
 
-    void Set(const float& x_, const float& y_)
+
+    void Set(const float& x_, const float& y_, const float& z_)
     {
         this->x = x_;
         this->y = y_;
+        this->z = z_;
     }
 
     void Normalize()
     {
-        float len = 1.0f / (sqrtf(x*x+y*y) + 0.00001f);
+        float len = 1.0f / (sqrtf(x*x+y*y+z*z) + 0.00001f);
         x *= len;
         y *= len;
+        z *= len;
     }
 
     float Length() const
     {
-        return sqrtf(x*x+y*y) + 0.00001f;
+        return sqrtf(x*x+y*y+z*z) + 0.00001f;
     }
 
     float Length2() const
     {
-        return x*x+y*y;
+        return x*x+y*y+z*z;
     }
 
-    Vector2 AsUnit() const
+    Vector AsUnit() const
     {
         float invlen = 1.0f/Length();
-        return Vector2(x*invlen, y*invlen);
+        return Vector(x*invlen, y*invlen, z*invlen);
     }
 
-    float Dot(const Vector2& other) const
+    float Dot(const Vector& other) const
     {
-        return x*other.x + y*other.y;
+        return x*other.x + y*other.y + z*other.z;
     }
 
-    inline Vector2 operator*(const float& other) const
+    inline Vector operator*(const float& other) const
     {
-        return Vector2(x*other, y*other);
+        return Vector(x*other, y*other, z*other);
     }
 
-    inline Vector2 operator/(const float& other) const
+    inline Vector operator/(const float& other) const
     {
         float div  = 1.0f/(other + 0.00001f);
-        return Vector2(x*div, y*div);
+        return Vector(x*div, y*div, z*div);
     }
 
-    inline Vector2 operator+(const Vector2& other) const
+    inline Vector operator+(const Vector& other) const
     {
-        return Vector2(x+other.x, y+other.y);
+        return Vector(x+other.x, y+other.y, z+other.z);
     }
 
-    inline Vector2 operator-(const Vector2& other) const
+    inline Vector operator-(const Vector& other) const
     {
-        return Vector2(x-other.x, y-other.y);
+        return Vector(x-other.x, y-other.y, z-other.z);
     }
 
-    inline Vector2& operator*=(const float& other)
+    inline Vector& operator*=(const float& other)
     {
         x *= other;
         y *= other;
+        z *= other;
         return *this;
     }
 
-    inline Vector2& operator+=(const Vector2& other)
+    inline Vector& operator+=(const Vector& other)
     {
         *this = *this + other;
         return *this;
     }
 
-    inline Vector2& operator-=(const Vector2& other)
+    inline Vector& operator-=(const Vector& other)
     {
         *this = *this - other;
         return *this;
     }
 
-    inline Vector2& operator/=(const float& other)
+    inline Vector& operator/=(const float& other)
     {
         float div = 1.0f/(other + 0.00001f);
         x *= div;
         y *= div;
+        z *= div;
         return *this;
     }
 };
 
-bool operator==(const Vector2& lhs, const Vector2& rhs);
-Vector2 operator*(const float& lhs, const Vector2& rhs);
+bool operator==(const Vector& lhs, const Vector& rhs);
+Vector operator*(const float& lhs, const Vector& rhs);
 
 
 #endif // VECTOR_H_INCLUDED

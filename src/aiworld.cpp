@@ -3,7 +3,7 @@
 #include <algorithm>
 
 //!Note only returns AIComponents in the given range
-std::vector<ComponentPtr> AIWorld::QueryRange(const Vector2& center, float rangesqr)
+std::vector<ComponentPtr> AIWorld::QueryRange(const Vector& center, float rangesqr)
 {
     std::vector<ComponentPtr> nearby;
     for(auto comp : components_)

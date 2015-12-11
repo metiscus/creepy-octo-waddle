@@ -31,7 +31,7 @@ std::vector<DrawablePtr> RenderComponent::GetDrawables()
 void RenderComponent::Update(uint64_t frame)
 {
     assert(GetParent());
-    const Vector2& position = GetParent()->GetPosition();
+    const Vector& position = GetParent()->GetPosition();
     for(auto drawable : drawables_)
     {
         drawable->SetPosition(position);
