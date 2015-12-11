@@ -14,3 +14,10 @@ Vector operator*(const float& lhs, const Vector& rhs)
 {
     return Vector(rhs.x*lhs, rhs.y*lhs);
 }
+
+
+// Vector Triple Product
+Vector TripleProduct(const Vector& a, const Vector& b, const Vector& c)
+{
+    return b * (a.Dot(c)) - c * (a.Dot(b));
+}

@@ -105,6 +105,6 @@ public:
 
 bool operator==(const Vector& lhs, const Vector& rhs);
 Vector operator*(const float& lhs, const Vector& rhs);
-
+Vector TripleProduct(const Vector& a, const Vector& b, const Vector& c);
 
 #endif // VECTOR_H_INCLUDED
