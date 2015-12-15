@@ -275,6 +275,6 @@ namespace rapidxml
 {
     void parse_error_handler(char const* str, void* ptr)
     {
-        fprintf(stderr, "[rapidxml] : %s", str);
+        Error(str);
     }
 }

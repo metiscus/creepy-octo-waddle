@@ -7,8 +7,8 @@ LDFLAGS=-pthread -lboost_system -lboost_filesystem -lboost_log
 	$(CXX) -c $(CXXFLAGS) $*.cpp -o $*.o
 	$(CXX) -MM -MD -MT "$*.o" $(CXXFLAGS) $*.cpp -o $*.d
 
-SDL_CFLAGS=`pkg-config --cflags sdl2`
-SDL_LDFLAGS=`pkg-config --libs sdl2`
+SDL_CFLAGS=$(shell pkg-config --cflags sdl2)
+SDL_LDFLAGS=$(shell pkg-config --libs sdl2)
 CXXFLAGS += $(SDL_CFLAGS)
 LDFLAGS += $(SDL_LDFLAGS)
 

@@ -28,6 +28,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <rapidxml/rapidxml.hpp>
+#include <rapidxml/rapidxml_utils.hpp>
 #pragma GCC diagnostic pop
 
 #endif // GLOBAL_H_INCLUDED

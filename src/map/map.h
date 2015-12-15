@@ -1,24 +1,27 @@
 #ifndef MAP_H_INCLUDED
 #define MAP_H_INCLUDED
 
-#include <string>
-#include <vector>
-#include <memory>
+#include "../global.h"
+#include "../resource.h"
 
 class Layer;
 class ObjectGroup;
 class Tileset;
 
-class Map
+// Resource Type is: 234c06b0-68eb-46d2-aca8-ba1f544038d2
+
+class Map : public Resource
 {
 public:
+    static const ResourceType TypeId;
+
     typedef std::shared_ptr<Tileset> TilesetPtr;
     typedef std::shared_ptr<Layer> LayerPtr;
     typedef std::vector<TilesetPtr> TilesetList;
     typedef std::vector<LayerPtr> LayerList;
     typedef std::vector< std::shared_ptr<ObjectGroup> > ObjectGroupList;
 
-    Map();
+    Map(const ResourceType& id);
     ~Map();
 
     bool Load(const std::string& filename);

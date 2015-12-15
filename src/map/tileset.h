@@ -1,15 +1,7 @@
 #ifndef TILESET_H_INCLUDED
 #define TILESET_H_INCLUDED
 
-#include <cstdint>
-#include <string>
-#include <vector>
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#include "rapidxml/rapidxml.hpp"
-#pragma GCC diagnostic pop
-
+#include "../global.h"
 #include "../vector.h"
 
 class Tileset

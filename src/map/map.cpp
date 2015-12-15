@@ -2,13 +2,20 @@
 #include "layer.h"
 #include "objectgroup.h"
 #include "tileset.h"
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#include "rapidxml/rapidxml_utils.hpp"
-#pragma GCC diagnostic pop
+#include "../resource.h"
 #include "../log.h"
 
-Map::Map()
+const ResourceType Map::TypeId =
+{
+0x23, 0x4c, 0x06, 0xb0,
+0x68, 0xeb,
+0x46, 0xd2,
+0xac, 0xa8,
+0xba, 0x1f, 0x54, 0x40, 0x38, 0xd2
+};
+
+Map::Map(const ResourceType& id)
+    : Resource(id, TypeId)
 {
     ;
 }
