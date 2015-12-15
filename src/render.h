@@ -1,11 +1,8 @@
 #ifndef RENDER_H_INCLUDED
 #define RENDER_H_INCLUDED
 
-#include <array>
-#include "component.h"
+#include "global.h"
 #include "componentcontainer.h"
-#include <cstdint>
-#include <unordered_map>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 

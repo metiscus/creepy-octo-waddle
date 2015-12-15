@@ -1,8 +1,8 @@
 #ifndef RENDERCOMPONENT_H_INCLUDED
 #define RENDERCOMPONENT_H_INCLUDED
 
+#include "global.h"
 #include "component.h"
-#include <cstdint>
 #include "drawable.h"
 #include "render.h"
 #include "vector.h"

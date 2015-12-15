@@ -1,9 +1,7 @@
 #ifndef LOGGING_H_INCLUDED
 #define LOGGING_H_INCLUDED
 
-#include <cstdio>
-#include <cstdarg>
-#include <string>
+#include "global.h"
 
 namespace Log
 {

@@ -1,9 +1,8 @@
 #ifndef OBJECT_H_INCLUDED
 #define OBJECT_H_INCLUDED
 
-#include <array>
+#include "global.h"
 #include "component.h"
-#include <memory>
 #include "vector.h"
 
 class Object

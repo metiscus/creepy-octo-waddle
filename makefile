@@ -17,27 +17,30 @@ libglad.a:
 
 GAME_SRC=\
 	src/main.cpp\
-	src/componentcontainer.h\
-	src/vector.cpp src/vector.h\
-	src/object.cpp src/object.h\
-	src/component.cpp src/component.h\
-	src/aicomponent.cpp src/aicomponent.h\
-	src/aiworld.cpp src/aiworld.h\
-	src/render.cpp src/render.h\
-	src/rendercomponent.cpp src/rendercomponent.h\
-	src/drawable.cpp src/drawable.h\
-	src/log.cpp src/log.h\
-	src/physicscomponent.cpp src/physicscomponent.h\
+	src/vector.cpp\
+	src/object.cpp\
+	src/component.cpp\
+	src/aicomponent.cpp\
+	src/aiworld.cpp\
+	src/render.cpp\
+	src/rendercomponent.cpp\
+	src/drawable.cpp\
+	src/log.cpp\
+	src/physicscomponent.cpp\
 
 GAME_CPP= $(filter %.cpp,$(GAME_SRC))
 GAME_OBJ= $(GAME_CPP:.cpp=.o)
 
 -include $(GAME_OBJ:.o=.d)
 
-game: $(GAME_OBJ) $(GAME_SRC) libglad.a
+src/global.h.gch: src/global.h
+	$(CXX) $(CXXFLAGS) -c src/global.h -o src/global.h.gch
+
+game: src/global.h.gch $(GAME_OBJ) $(GAME_SRC) libglad.a
 	$(CXX) $(CXXFLAGS) -o game $(GAME_OBJ) $(SDL_LDFLAGS) -lglad -ldl
 
 clean:
+	-rm src/global.h.gch
 	-find -name "*.o" -exec rm -f {} \;
 	-find -name "*.d" -exec rm -f {} \;
 	-rm -f game libglad.a

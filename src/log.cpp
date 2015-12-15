@@ -1,5 +1,5 @@
 #include "log.h"
-#include <cstdint>
+#include <cstdarg>
 
 namespace Log
 {

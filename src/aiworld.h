@@ -1,12 +1,11 @@
 #ifndef AIWORLD_H_INCLUDED
 #define AIWORLD_H_INCLUDED
 
+#include "global.h"
 #include "aicomponent.h"
 #include "component.h"
 #include "vector.h"
 #include "componentcontainer.h"
-
-#include <vector>
 
 class AIWorld : public ComponentContainer<AIComponent>
 {
