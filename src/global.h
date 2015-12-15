@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 
+#include <algorithm>
 #include <array>
 //#include <cassert>
 #include <cmath>
@@ -12,6 +13,7 @@
 #include <cstring>
 #include <fstream>
 #include <functional>
+#include <map>
 #include <memory>
 #include <queue>
 #include <unordered_map>

@@ -1,5 +1,7 @@
 CXX=g++
-CXXFLAGS=-g -Wall -Wextra -Wshadow -std=c++11 -Iextern/glad/include -Iextern -L.
+LD=g++
+CXXFLAGS=-g -Wall -Wextra -Wshadow -std=c++11 -Iextern/glad/include -Iextern -L. -DBOOST_ALL_DYN_LINK
+LDFLAGS=-pthread -lboost_system -lboost_filesystem -lboost_log
 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $*.cpp -o $*.o
@@ -8,6 +10,7 @@ CXXFLAGS=-g -Wall -Wextra -Wshadow -std=c++11 -Iextern/glad/include -Iextern -L.
 SDL_CFLAGS=`pkg-config --cflags sdl2`
 SDL_LDFLAGS=`pkg-config --libs sdl2`
 CXXFLAGS += $(SDL_CFLAGS)
+LDFLAGS += $(SDL_LDFLAGS)
 
 default: game
 
@@ -28,6 +31,7 @@ GAME_SRC=\
 	src/drawable.cpp\
 	src/log.cpp\
 	src/physicscomponent.cpp\
+	src/resourcemanager.cpp\
 	src/render/camera.cpp\
 	src/render/program.cpp\
 	src/render/sampler.cpp\
@@ -46,7 +50,7 @@ src/global.h.gch: src/global.h
 	$(CXX) $(CXXFLAGS) -c src/global.h -o src/global.h.gch
 
 game: src/global.h.gch $(GAME_OBJ) $(GAME_SRC) libglad.a
-	$(CXX) $(CXXFLAGS) -o game $(GAME_OBJ) $(SDL_LDFLAGS) -lglad -ldl
+	$(LD) $(CXXFLAGS) -o game $(GAME_OBJ) $(LDFLAGS) -lglad -ldl
 
 clean:
 	-rm src/global.h.gch

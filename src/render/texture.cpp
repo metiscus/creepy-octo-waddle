@@ -4,22 +4,29 @@
 #include "../stb_image.h"
 #include "texture.h"
 
-/********************
- * class Texture
- ********************/
-Texture::Texture()
-    : mIsDirty(false)
-    , mGenerateMipmaps(true)
+const ResourceType Texture::TypeId =
 {
-    glGenTextures(1, &mTexture);
+    0x89, 0xd9, 0x4a, 0xd2,
+    0xa7, 0x32,
+    0x49, 0xde,
+    0x8e, 0xf5,
+    0xca, 0x95, 0x79, 0xc0, 0x00, 0xd3
+};
+
+Texture::Texture(const ResourceId& id)
+    : Resource(id, TypeId)
+    , is_dirty_(false)
+    , generate_mipmaps_(true)
+{
+    glGenTextures(1, &texture_);
 }
 
 Texture::~Texture()
 {
-    glDeleteTextures(1, &mTexture);
+    glDeleteTextures(1, &texture_);
 }
 
-bool Texture::loadFromFile(const char *filename)
+bool Texture::LoadFromFile(const char *filename)
 {
     if (!filename)
     {
@@ -31,13 +38,13 @@ bool Texture::loadFromFile(const char *filename)
     const GLubyte *loadedData = stbi_load(filename, &width, &height, &c, 4);
     if (loadedData != NULL)
     {
-        mIsDirty = true;
+        is_dirty_ = true;
 
         Log::Write(Log::RenderGroup, "Texture: loaded %s (%d x %d) with %d channels.", filename, width, height, c);
         Log::Write(Log::RenderGroup, "Texture: forcing RGBA.");
 
         // copy data to internal buffer and release
-        mData.resize(width, height, 4, TextureData::Texel_U8, loadedData);
+        data_.resize(width, height, 4, TextureData::Texel_U8, loadedData);
         stbi_image_free((void *)loadedData);
 
         // some file extensions require flipping
@@ -50,7 +57,7 @@ bool Texture::loadFromFile(const char *filename)
             if (extension != "bmp")
             {
                 // textureVFlip(mData.getData(), width, height);
-                mData.flipImageVertical();
+                data_.flipImageVertical();
                 Log::Write(Log::RenderGroup, "Texture: inverting scanlines.");
             }
         }
@@ -66,35 +73,35 @@ bool Texture::loadFromFile(const char *filename)
     return true;
 }
 
-bool Texture::setFromData(const TextureData &data)
+bool Texture::SetFromData(const TextureData &data)
 {
-    mIsDirty = true;
-    mData = data;
+    is_dirty_ = true;
+    data_ = data;
     return true;
 }
 
-TextureData &Texture::getDataRW()
+TextureData &Texture::GetDataRW()
 {
-    mIsDirty = true; // automatically mark as dirty
-    return mData;
+    is_dirty_ = true; // automatically mark as dirty
+    return data_;
 }
 
-const TextureData &Texture::getDataRO() const
+const TextureData &Texture::GetDataRO() const
 {
-    return mData;
+    return data_;
 }
 
-void Texture::dirty()
+void Texture::Dirty()
 {
-    mIsDirty = true;
+    is_dirty_ = true;
 }
 
 bool Texture::operator==(const Texture &rhs) const
 {
-    return mTexture == rhs.mTexture;
+    return texture_ == rhs.texture_;
 }
 
-void Texture::setParameter(Texture::Parameter param, unsigned int value)
+void Texture::SetParameter(Texture::Parameter param, unsigned int value)
 {
     GLenum glparam;
 
@@ -117,53 +124,53 @@ void Texture::setParameter(Texture::Parameter param, unsigned int value)
         break;
     }
 
-    bind();
+    Bind();
     glTexParameteriv(GL_TEXTURE_2D, glparam, (GLint *)&value);
 }
 
-int Texture::getWidth() const
+int Texture::GetWidth() const
 {
-    return mData.getWidth();
+    return data_.getWidth();
 }
 
-int Texture::getHeight() const
+int Texture::GetHeight() const
 {
-    return mData.getHeight();
+    return data_.getHeight();
 }
 
-unsigned int Texture::getObject()
+unsigned int Texture::GetObject()
 {
-    return mTexture;
+    return texture_;
 }
 
-void Texture::bind()
+void Texture::Bind()
 {
     _updateImageData();
-    glBindTexture(GL_TEXTURE_2D, mTexture);
+    glBindTexture(GL_TEXTURE_2D, texture_);
 }
 
-void Texture::enableGenerateMipmaps()
+void Texture::EnableGenerateMipmaps()
 {
-    mGenerateMipmaps = true;
+    generate_mipmaps_ = true;
 }
 
-void Texture::disableGenerateMipmaps()
+void Texture::DisableGenerateMipmaps()
 {
-    mGenerateMipmaps = false;
+    generate_mipmaps_ = false;
 }
 
 void Texture::_updateImageData()
 {
-    if (mIsDirty)
+    if (is_dirty_)
     {
-        mIsDirty = false;
-        Log::Write(Log::RenderGroup, "Texture: texture %d has dirty data, refreshing.", mTexture);
+        is_dirty_ = false;
+        Log::Write(Log::RenderGroup, "Texture: texture %d has dirty data, refreshing.", texture_);
 
-        glBindTexture(GL_TEXTURE_2D, mTexture);
+        glBindTexture(GL_TEXTURE_2D, texture_);
 
         GLenum texelType = GL_RGBA;
 
-        switch (mData.getChannels())
+        switch (data_.getChannels())
         {
         case 1:
             texelType = GL_RED;
@@ -186,7 +193,7 @@ void Texture::_updateImageData()
         }
 
         GLenum dataType;
-        switch (mData.getType())
+        switch (data_.getType())
         {
         case TextureData::Texel_U8:
             dataType = GL_UNSIGNED_BYTE;
@@ -204,20 +211,20 @@ void Texture::_updateImageData()
         }
         }
 
-        if (mData.getType() != TextureData::Texel_F32)
+        if (data_.getType() != TextureData::Texel_F32)
         {
-            glTexImage2D(GL_TEXTURE_2D, 0, texelType, mData.getWidth(),
-                         mData.getHeight(), 0, texelType, dataType, mData.getData());
+            glTexImage2D(GL_TEXTURE_2D, 0, texelType, data_.getWidth(),
+                         data_.getHeight(), 0, texelType, dataType, data_.getData());
         }
         else
         {
             // support non-normalized textures
             // possible to use GL_RGBA32F as well if you need more resolution
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, mData.getWidth(),
-                         mData.getHeight(), 0, texelType, dataType, mData.getData());
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, data_.getWidth(),
+                         data_.getHeight(), 0, texelType, dataType, data_.getData());
         }
 
-        if (mGenerateMipmaps)
+        if (generate_mipmaps_)
         {
             Log::Write(Log::RenderGroup, "Texture: generating mipmaps.");
             glGenerateMipmap(GL_TEXTURE_2D);
