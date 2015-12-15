@@ -14,8 +14,8 @@ void ResourceManager::CreateInstance()
 {
     if(!instance)
     {
-        instance = new ResourceManager();
         BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::CreateInstance() : " << (void*)instance;
+        instance = new ResourceManager();
     }
 }
 
@@ -94,6 +94,11 @@ void ResourceManager::AddResourceLoader(const ResourceLoader& loader)
     loaders_.insert(std::make_pair(loader.type, loader));
 }
 
+std::string ResourceManager::GetResourcePath(const std::string& file) const
+{
+    return resourcePath_ + std::string("/") + file;
+}
+
 void ResourceManager::UpdateResources()
 {
     resourceFiles_.clear();
@@ -119,61 +124,70 @@ void ResourceManager::UpdateResources()
 
 bool ResourceManager::LoadResourceFile(ResourceId id, const std::string& filename)
 {
-    ///\TODO: Add some better error checking / reporting in here
-    std::string file = FileToString(filename);
-    char *fileCStr = strdup(file.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(fileCStr);
-
-    bool ret = false;
-    rapidxml::xml_node<> *node = doc.first_node("resource");
     BOOST_LOG_TRIVIAL(trace)<<"Loading file "<<filename<<" for resource "<<boost::lexical_cast<std::string>(id);
-    if(node)
-    {
-        for(rapidxml::xml_node<> *dependency = node->first_node("reference"); dependency!=nullptr; dependency = dependency->next_sibling("reference"))
-        {
-            rapidxml::xml_attribute<> *referenceIdNode = dependency->first_attribute("uuid");
-            ResourceId referenceId = Resource::StringToResourceId(referenceIdNode->value());
-            if(!IsResourceLoaded(referenceId))
-            {
-                BOOST_LOG_TRIVIAL(trace)<<"Loading resource "<<boost::lexical_cast<std::string>(referenceId)<<" as dependency";
-                if(!LoadResource(referenceId))
-                {
-                    BOOST_LOG_TRIVIAL(error)<<"Unable to load " << boost::lexical_cast<std::string>(referenceId) << " as dependency for "
-                        << boost::lexical_cast<std::string>(id);
-                    free(fileCStr);
-                    return false;
-                }
-            }
-        }
+    ///\TODO: Add some better error checking / reporting in here
+    rapidxml::file<> resfile(filename.c_str());
+    rapidxml::xml_document<> doc;
+    doc.parse<0>(resfile.data());
 
-        rapidxml::xml_attribute<> *attr = node->first_attribute("type");
-        if(attr)
+    rapidxml::xml_node<> *node = doc.first_node("resource");
+    do
+    {
+        if(node)
         {
-            ResourceType type = Resource::StringToResourceType(attr->value());
-            auto itr = loaders_.find(type);
-            if(itr != loaders_.end())
+            // ensure that the uuid matches up
+            rapidxml::xml_attribute<> *resourceIdNode = node->first_attribute("uuid");
+            ResourceId resourceId = Resource::StringToResourceId(resourceIdNode->value());
+            if(resourceId == id)
             {
-                std::shared_ptr<Resource> resource = itr->second.load_fun(doc);
-                if(!!resource)
+                for(rapidxml::xml_node<> *dependency = node->first_node("reference"); dependency!=nullptr; dependency = dependency->next_sibling("reference"))
                 {
-                    ret = true;
-                    resources_[id] = resource;
+                    rapidxml::xml_attribute<> *referenceIdNode = dependency->first_attribute("uuid");
+                    ResourceId referenceId = Resource::StringToResourceId(referenceIdNode->value());
+                    if(!IsResourceLoaded(referenceId))
+                    {
+                        BOOST_LOG_TRIVIAL(trace)<<"Loading resource "<<boost::lexical_cast<std::string>(referenceId)<<" as dependency";
+                        if(!LoadResource(referenceId))
+                        {
+                            BOOST_LOG_TRIVIAL(error)<<"Unable to load " << boost::lexical_cast<std::string>(referenceId) << " as dependency for "
+                                << boost::lexical_cast<std::string>(id);
+                            return false;
+                        }
+                    }
+                }
+
+                rapidxml::xml_attribute<> *attr = node->first_attribute("type");
+                if(attr)
+                {
+                    ResourceType type = Resource::StringToResourceType(attr->value());
+                    auto itr = loaders_.find(type);
+                    if(itr != loaders_.end())
+                    {
+                        std::shared_ptr<Resource> resource = itr->second.load_fun(doc);
+                        if(!!resource)
+                        {
+                            resources_[id] = resource;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    BOOST_LOG_TRIVIAL(error)<<filename<<" did not contain valid type field for resource";
+                    return false;
                 }
             }
         }
         else
         {
-            BOOST_LOG_TRIVIAL(error)<<filename<<" did not contain valid type field for resource";
+            BOOST_LOG_TRIVIAL(error)<<filename<<" did not contain valid resource node";
+            return false;
         }
-    }
-    else
-    {
-        BOOST_LOG_TRIVIAL(error)<<filename<<" did not contain valid resource node";
-    }
-    free(fileCStr);
+        
+        node = node->next_sibling("resource");
+    } while(node);
 
-    return ret;
+    return true;
 }
 
 bool ResourceManager::IsResourceLoaded(ResourceId id) const
@@ -202,9 +216,9 @@ std::string ResourceManager::FileToString(const std::string& filename) const
 
 void ResourceManager::CacheResourceId(const std::string& filepath)
 {
-    std::string file = FileToString(filepath);
+    rapidxml::file<> resfile(filepath.c_str());
     rapidxml::xml_document<> doc;
-    doc.parse<rapidxml::parse_non_destructive>(&file[0]);
+    doc.parse<0>(resfile.data());
     rapidxml::xml_node<> *node = doc.first_node("resource");
     while(node)
     {
@@ -213,12 +227,13 @@ void ResourceManager::CacheResourceId(const std::string& filepath)
         {
             return;
         }
-
+        
         std::string uuidStr(attr->value(), attr->value_size());
         ResourceId uuid = Resource::StringToResourceId(uuidStr.c_str());
+
         resourceFiles_.insert(std::make_pair(uuid, filepath));
 
-        BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::CacheResourceId: "<<uuidStr<<":"<<filepath;
+        BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::CacheResourceId: "<<uuidStr<<" : "<<filepath;
         
         node = node->next_sibling("resource");
     }

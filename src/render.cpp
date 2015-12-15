@@ -16,6 +16,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #pragma GCC diagnostic pop
 
+#include "resourcemanager.h"
+#include "render/texture.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -170,6 +173,18 @@ void Render::InitGl()
 
     glClearColor(0.f, 0.2f, 0.2f, 0.f);
     glClearDepth(0.0);
+    
+    ResourceManager::GetInstance().LoadResource( Resource::StringToResourceId("948f16fa-78ed-11e5-8bcf-feff819cdc9f") );
+    auto res = ResourceManager::GetInstance().GetResource(Resource::StringToResourceId("948f16fa-78ed-11e5-8bcf-feff819cdc9f"));
+    auto tex = std::static_pointer_cast<Texture>(res);
+
+    struct textureinfo info;
+    info.channels = 4;
+    info.width = tex->GetWidth();
+    info.height = tex->GetHeight();
+    info.tile_width = 64;
+    info.tile_height = 64;
+    textures_.insert(std::make_pair(1, info));
 }
 
 void Render::LoadTexture(uint32_t id)
@@ -179,7 +194,7 @@ void Render::LoadTexture(uint32_t id)
     // right now the texture names are hard coded
     const char *files[] = { "", "data/yoshi.png"};
     uint32_t tile_info[] = {0, 0, 64, 64};
-
+#if 0
     stbi_set_flip_vertically_on_load(1);
 
     if(textures_.count(id) == 0)
@@ -212,6 +227,7 @@ void Render::LoadTexture(uint32_t id)
 
         textures_.insert(std::make_pair(id, info));
     }
+#endif
 }
 
 void Render::BindTexture(uint32_t id)
@@ -228,6 +244,9 @@ void Render::BindTexture(uint32_t id)
     }
     else
     {
+        auto res = ResourceManager::GetInstance().GetResource(Resource::StringToResourceId("948f16fa-78ed-11e5-8bcf-feff819cdc9f"));
+        std::static_pointer_cast<Texture>(res)->Bind();
+#if 0        
         auto itr = textures_.find(id);
         if(itr==textures_.end())
         {
@@ -241,6 +260,7 @@ void Render::BindTexture(uint32_t id)
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, itr->second.handle);
         }
+#endif
     }
     bound_texture_ = id;
 }

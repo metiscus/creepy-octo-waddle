@@ -50,11 +50,6 @@ void add_yoshi( std::vector<std::shared_ptr<Object> > &objects, int x, int y)
 
 int main()
 {
-    ai_world = std::make_shared<AIWorld>();//(new AIWorld());
-    render = std::make_shared<Render>();//(new Render());
-
-    std::vector<std::shared_ptr<Object> > objects;
-
     ResourceManager::CreateInstance();
     ResourceLoader imageLoader;
     imageLoader.type = Resource::StringToResourceType("89d94ad2-a732-49de-8ef5-ca9579c000d3");
@@ -63,6 +58,12 @@ int main()
         return Texture::Load(doc);
     };
     
+    ResourceManager::GetInstance().AddResourceLoader(imageLoader);
+    
+    ai_world = std::make_shared<AIWorld>();//(new AIWorld());
+    render = std::make_shared<Render>();//(new Render());
+
+    std::vector<std::shared_ptr<Object> > objects;   
     
     const float circle_radius = 220.0;
     const int yoshi_count = 32;
@@ -141,3 +142,4 @@ int main()
 
     return 0;
 }
+

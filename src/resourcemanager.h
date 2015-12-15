@@ -22,6 +22,8 @@ public:
     std::shared_ptr<Resource> GetResource(ResourceId resource);
 
     void AddResourceLoader(const ResourceLoader& loader);
+    
+    std::string GetResourcePath(const std::string& file) const;
 
 private:
     std::string resourcePath_;

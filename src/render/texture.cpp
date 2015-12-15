@@ -3,6 +3,7 @@
 #include "../log.h"
 #include "../stb_image.h"
 #include "texture.h"
+#include "../resourcemanager.h"
 
 const ResourceType Texture::TypeId =
 {
@@ -40,7 +41,8 @@ std::shared_ptr<Resource> Texture::Load(rapidxml::xml_document<> &doc)
     ResourceId resId = Resource::StringToResourceId(node->first_attribute("uuid")->value());
     ret.reset(new Texture(resId));
 
-    std::static_pointer_cast<Texture>(ret)->LoadFromFile(node->first_attribute("filename")->value());
+    std::string image_filename (node->first_node("file")->value());
+    std::static_pointer_cast<Texture>(ret)->LoadFromFile(ResourceManager::GetInstance().GetResourcePath(image_filename).c_str());
 
     return ret;
 }
