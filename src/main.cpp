@@ -7,6 +7,14 @@
 #include "physicscomponent.h"
 #include "render.h"
 #include "rendercomponent.h"
+#include "resourcemanager.h"
+#include "render/texture.h"
+
+#include <boost/filesystem.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/string_generator.hpp>
+#include <boost/log/trivial.hpp>
 
 std::shared_ptr<AIWorld> ai_world;
 std::shared_ptr<Render> render;
@@ -47,7 +55,15 @@ int main()
 
     std::vector<std::shared_ptr<Object> > objects;
 
-
+    ResourceManager::CreateInstance();
+    ResourceLoader imageLoader;
+    imageLoader.type = Resource::StringToResourceType("89d94ad2-a732-49de-8ef5-ca9579c000d3");
+    imageLoader.load_fun = [](rapidxml::xml_document<> &doc) -> std::shared_ptr<Resource>
+    {
+        return Texture::Load(doc);
+    };
+    
+    
     const float circle_radius = 220.0;
     const int yoshi_count = 32;
     for(int i=0; i<yoshi_count; ++i)

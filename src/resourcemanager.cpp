@@ -206,22 +206,22 @@ void ResourceManager::CacheResourceId(const std::string& filepath)
     rapidxml::xml_document<> doc;
     doc.parse<rapidxml::parse_non_destructive>(&file[0]);
     rapidxml::xml_node<> *node = doc.first_node("resource");
-    if(!node)
+    while(node)
     {
-        return;
+        rapidxml::xml_attribute<> *attr = node->first_attribute("uuid");
+        if(!attr)
+        {
+            return;
+        }
+
+        std::string uuidStr(attr->value(), attr->value_size());
+        ResourceId uuid = Resource::StringToResourceId(uuidStr.c_str());
+        resourceFiles_.insert(std::make_pair(uuid, filepath));
+
+        BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::CacheResourceId: "<<uuidStr<<":"<<filepath;
+        
+        node = node->next_sibling("resource");
     }
-
-    rapidxml::xml_attribute<> *attr = node->first_attribute("uuid");
-    if(!attr)
-    {
-        return;
-    }
-
-    std::string uuidStr(attr->value(), attr->value_size());
-    ResourceId uuid = Resource::StringToResourceId(uuidStr.c_str());
-    resourceFiles_.insert(std::make_pair(uuid, filepath));
-
-    BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::CacheResourceId: "<<uuidStr<<":"<<filepath;
 }
 
 #if 0

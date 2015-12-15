@@ -16,6 +16,8 @@ public:
     Texture(const ResourceId& id);
     ~Texture();
 
+    static std::shared_ptr<Resource> Load(rapidxml::xml_document<> &doc);
+    
     bool LoadFromFile(const char* filename);
 
     bool SetFromData(const TextureData& data);

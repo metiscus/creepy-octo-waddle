@@ -19,11 +19,30 @@ Texture::Texture(const ResourceId& id)
     , generate_mipmaps_(true)
 {
     glGenTextures(1, &texture_);
+    glBindTexture(GL_TEXTURE_2D, texture_);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
 Texture::~Texture()
 {
     glDeleteTextures(1, &texture_);
+}
+
+std::shared_ptr<Resource> Texture::Load(rapidxml::xml_document<> &doc)
+{
+    std::shared_ptr<Resource> ret;
+    rapidxml::xml_node<> *node = doc.first_node("resource");
+    assert(node);
+
+    ResourceId resId = Resource::StringToResourceId(node->first_attribute("uuid")->value());
+    ret.reset(new Texture(resId));
+
+    std::static_pointer_cast<Texture>(ret)->LoadFromFile(node->first_attribute("filename")->value());
+
+    return ret;
 }
 
 bool Texture::LoadFromFile(const char *filename)
@@ -34,6 +53,8 @@ bool Texture::LoadFromFile(const char *filename)
         return false;
     }
 
+    stbi_set_flip_vertically_on_load(1);
+    
     int c, width, height;
     const GLubyte *loadedData = stbi_load(filename, &width, &height, &c, 4);
     if (loadedData != NULL)
@@ -47,6 +68,7 @@ bool Texture::LoadFromFile(const char *filename)
         data_.resize(width, height, 4, TextureData::Texel_U8, loadedData);
         stbi_image_free((void *)loadedData);
 
+#if 0        
         // some file extensions require flipping
         std::string extension = filename;
         size_t itr = extension.rfind(".");
@@ -57,12 +79,11 @@ bool Texture::LoadFromFile(const char *filename)
             if (extension != "bmp")
             {
                 // textureVFlip(mData.getData(), width, height);
-                data_.flipImageVertical();
-                Log::Write(Log::RenderGroup, "Texture: inverting scanlines.");
+                //data_.flipImageVertical();
+                //Log::Write(Log::RenderGroup, "Texture: inverting scanlines.");
             }
         }
-
-        glBindTexture(GL_TEXTURE_2D, 0);
+#endif
     }
     else
     {
