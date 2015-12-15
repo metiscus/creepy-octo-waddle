@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 
 #include <array>
-#include <cassert>
+//#include <cassert>
 #include <cmath>
 #include <cstdint>
 #include <cstdio>

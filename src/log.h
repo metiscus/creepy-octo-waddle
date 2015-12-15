@@ -8,7 +8,7 @@ namespace Log
     enum LogGroup
     {
         DefaultGroup = 0x1,
-        DebugGroup = DefaultGroup,
+        DebugGroup   = DefaultGroup,
         WarnGroup    = DefaultGroup<<1,
         ErrorGroup   = DefaultGroup<<2,
         RenderGroup  = DefaultGroup<<3,
@@ -20,6 +20,20 @@ namespace Log
 
     void Write(enum LogGroup group, const char* str, ...);
     void Write(enum LogGroup group, const std::string& str, ...);
+}
+
+#define Assert(test)                                                \
+if(!(test))                                                         \
+{                                                                   \
+    fprintf(stderr, "[Assert] : Condition '%s' false.\n", #test);   \
+    abort();                                                        \
+}
+
+#define AssertMessage(test, msg)                                    \
+if(!(test))                                                         \
+{                                                                   \
+    fprintf(stderr, "[Assert] : Condition '%s' false. %s\n", #test, msg);\
+    abort();                                                        \
 }
 
 #endif // LOGGING_H_INCLUDED

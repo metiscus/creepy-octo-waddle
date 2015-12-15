@@ -16,6 +16,7 @@ libglad.a:
 	ar -rcs libglad.a extern/glad/src/glad.o
 
 GAME_SRC=\
+	src/global.cpp\
 	src/main.cpp\
 	src/vector.cpp\
 	src/object.cpp\

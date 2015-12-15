@@ -1,3 +1,4 @@
+#include "global.h"
 #include "log.h"
 #include <cstdarg>
 
@@ -59,5 +60,4 @@ namespace Log
             va_end(ap);
         }
     }
-
 }
