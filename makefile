@@ -28,6 +28,14 @@ GAME_SRC=\
 	src/drawable.cpp\
 	src/log.cpp\
 	src/physicscomponent.cpp\
+	src/render/camera.cpp\
+	src/render/program.cpp\
+	src/render/sampler.cpp\
+	src/render/shader.cpp\
+	src/render/texture.cpp\
+	src/render/texturedata.cpp\
+	src/render/uniform.cpp\
+	src/render/vbo.cpp\
 
 GAME_CPP= $(filter %.cpp,$(GAME_SRC))
 GAME_OBJ= $(GAME_CPP:.cpp=.o)
