@@ -20,6 +20,7 @@ namespace Log
 
     void Write(enum LogGroup group, const char* str, ...);
     void Write(enum LogGroup group, const std::string& str, ...);
+
 }
 
 #define Assert(test)                                                \
@@ -36,4 +37,13 @@ if(!(test))                                                         \
     abort();                                                        \
 }
 
+#define Debug(msg, ...)\
+    Log::Write(Log::DebugGroup, msg, ##__VA_ARGS__);
+
+#define Warn(msg, ...)\
+    Log::Write(Log::WarnGroup, msg, ##__VA_ARGS__);
+
+#define Error(msg, ...)\
+    Log::Write(Log::ErrorGroup, msg, ##__VA_ARGS__);
+    
 #endif // LOGGING_H_INCLUDED

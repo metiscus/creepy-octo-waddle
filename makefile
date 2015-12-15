@@ -40,6 +40,10 @@ GAME_SRC=\
 	src/render/texturedata.cpp\
 	src/render/uniform.cpp\
 	src/render/vbo.cpp\
+	src/map/layer.cpp\
+	src/map/map.cpp\
+	src/map/tileset.cpp\
+	
 
 GAME_CPP= $(filter %.cpp,$(GAME_SRC))
 GAME_OBJ= $(GAME_CPP:.cpp=.o)

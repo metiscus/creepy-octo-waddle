@@ -60,4 +60,5 @@ namespace Log
             va_end(ap);
         }
     }
+    
 }
