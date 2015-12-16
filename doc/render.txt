@@ -1,0 +1,20 @@
+* Render Design
+** RenderState
+Contains the changable state for the renderer.
+*** Members
+Blending
+Program
+Textures
+** Geometry
+Contains the data for drawing some geometry.
+*** Members
+Primitive Sets
+VertexArray
+** PrimitiveSet
+Contains information for what type of primitives to draw
+*** Members
+First index
+count
+
+* 
+asdf
