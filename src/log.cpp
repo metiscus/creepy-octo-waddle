@@ -8,6 +8,7 @@ namespace Log
 
     static const char* log_group_text [] =
     {
+        "Trace",
         "Debug",
         "Warn",
         "Error",

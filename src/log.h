@@ -8,11 +8,12 @@ namespace Log
     enum LogGroup
     {
         DefaultGroup = 0x1,
-        DebugGroup   = DefaultGroup,
-        WarnGroup    = DefaultGroup<<1,
-        ErrorGroup   = DefaultGroup<<2,
-        RenderGroup  = DefaultGroup<<3,
-        AIGroup      = DefaultGroup<<4
+        TraceGroup   = DefaultGroup,
+        DebugGroup   = DefaultGroup<<1,
+        WarnGroup    = DefaultGroup<<2,
+        ErrorGroup   = DefaultGroup<<3,
+        RenderGroup  = DefaultGroup<<4,
+        AIGroup      = DefaultGroup<<5
     };
 
     void EnableGroup(enum LogGroup group);
@@ -36,6 +37,9 @@ if(!(test))                                                         \
     fprintf(stderr, "[Assert] : Condition '%s' false. %s\n", #test, msg);\
     abort();                                                        \
 }
+
+#define Trace(msg, ...)\
+    Log::Write(Log::TraceGroup, msg, ##__VA_ARGS__);
 
 #define Debug(msg, ...)\
     Log::Write(Log::DebugGroup, msg, ##__VA_ARGS__);
