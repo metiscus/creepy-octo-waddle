@@ -11,6 +11,11 @@ const ResourceType AIComponent::TypeId =
     0xca, 0x95, 0x79, 0xc0, 0x00, 0xd6
 };
 
+std::shared_ptr<Resource> AIComponent::Load(rapidxml::xml_document<> &doc)
+{
+    return std::shared_ptr<Resource>();
+}
+
 AIComponent::AIComponent()
     : Component(TypeId)
     , world_(nullptr)

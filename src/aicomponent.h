@@ -14,6 +14,7 @@ class AIComponent : public Component
 
 public:
     static const ResourceType TypeId;
+    static std::shared_ptr<Resource> Load(rapidxml::xml_document<> &doc);
     
     AIComponent();
     virtual ~AIComponent() = default;
