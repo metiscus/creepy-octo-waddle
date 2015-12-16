@@ -7,6 +7,7 @@
 #include <boost/uuid/string_generator.hpp>
 #include <boost/log/trivial.hpp>
 #include <iterator>
+#include "log.h"
 
 static ResourceManager* instance = nullptr;
 
@@ -14,14 +15,14 @@ void ResourceManager::CreateInstance()
 {
     if(!instance)
     {
-        BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::CreateInstance() : " << (void*)instance;
+        Trace("ResourceManager::CreateInstance()");
         instance = new ResourceManager();
     }
 }
 
 void ResourceManager::DestroyInstance()
 {
-    BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::DestroyInstance() : " << (void*)instance;
+    Trace("ResourceManager::DestroyInstance() %p", (void*)instance);
     delete instance;
     instance = nullptr;
 }
@@ -54,7 +55,7 @@ bool ResourceManager::LoadResource(ResourceId id)
     auto fileMapItr = resourceFiles_.find(id);
     if(fileMapItr == resourceFiles_.end())
     {
-        BOOST_LOG_TRIVIAL(warning)<<"ResourceManager::LoadResource invalid resource id: "<< boost::lexical_cast<std::string>(id);
+        Warn("ResourceManager::LoadResource invalid resource id: ",  boost::lexical_cast<std::string>(id).c_str());
         return false;
     }
     else
@@ -80,7 +81,7 @@ std::shared_ptr<Resource> ResourceManager::GetResource(ResourceId id)
     auto itr = resources_.find(id);
     if(itr == resources_.end())
     {
-        BOOST_LOG_TRIVIAL(warning)<<"ResourceManager::GetResource invalid resource id: "<< boost::lexical_cast<std::string>(id);
+        Warn("ResourceManager::GetResource invalid resource id: %s", boost::lexical_cast<std::string>(id).c_str());
     }
     else
     {
@@ -103,7 +104,7 @@ void ResourceManager::UpdateResources()
 {
     resourceFiles_.clear();
 
-    BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::UpdateResources "<<resourcePath_;
+    Trace("ResourceManager::UpdateResources %s", resourcePath_.c_str());
     boost::filesystem::path path(resourcePath_);
     if(boost::filesystem::exists(path))
     {
@@ -113,7 +114,7 @@ void ResourceManager::UpdateResources()
 
         for(auto p : files)
         {
-            BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::UpdateResources :"<<p.string();
+            Trace("ResourceManager::UpdateResources : %s", p.string().c_str());
             if(boost::filesystem::is_regular_file(p) && p.extension() == std::string(".xml"))
             {
                 CacheResourceId(p.string());
@@ -124,7 +125,7 @@ void ResourceManager::UpdateResources()
 
 bool ResourceManager::LoadResourceFile(ResourceId id, const std::string& filename)
 {
-    BOOST_LOG_TRIVIAL(trace)<<"Loading file "<<filename<<" for resource "<<boost::lexical_cast<std::string>(id);
+    Trace("Loading file '%s' for resource %s", filename.c_str(), boost::lexical_cast<std::string>(id).c_str());
     ///\TODO: Add some better error checking / reporting in here
     rapidxml::file<> resfile(filename.c_str());
     rapidxml::xml_document<> doc;
@@ -146,11 +147,10 @@ bool ResourceManager::LoadResourceFile(ResourceId id, const std::string& filenam
                     ResourceId referenceId = Resource::StringToResourceId(referenceIdNode->value());
                     if(!IsResourceLoaded(referenceId))
                     {
-                        BOOST_LOG_TRIVIAL(trace)<<"Loading resource "<<boost::lexical_cast<std::string>(referenceId)<<" as dependency";
+                        Trace("Loading resource %s as dependency", boost::lexical_cast<std::string>(referenceId).c_str());
                         if(!LoadResource(referenceId))
                         {
-                            BOOST_LOG_TRIVIAL(error)<<"Unable to load " << boost::lexical_cast<std::string>(referenceId) << " as dependency for "
-                                << boost::lexical_cast<std::string>(id);
+                            Error("Unable to load %s  as dependency for %s", boost::lexical_cast<std::string>(referenceId).c_str(), boost::lexical_cast<std::string>(id).c_str());
                             return false;
                         }
                     }
@@ -173,14 +173,14 @@ bool ResourceManager::LoadResourceFile(ResourceId id, const std::string& filenam
                 }
                 else
                 {
-                    BOOST_LOG_TRIVIAL(error)<<filename<<" did not contain valid type field for resource";
+                    Error("'%s' did not contain valid type field for resource", filename.c_str());
                     return false;
                 }
             }
         }
         else
         {
-            BOOST_LOG_TRIVIAL(error)<<filename<<" did not contain valid resource node";
+            Error("'%s' did not contain valid resource node", filename.c_str());
             return false;
         }
         
@@ -233,7 +233,7 @@ void ResourceManager::CacheResourceId(const std::string& filepath)
 
         resourceFiles_.insert(std::make_pair(uuid, filepath));
 
-        BOOST_LOG_TRIVIAL(trace)<<"ResourceManager::CacheResourceId: "<<uuidStr<<" : "<<filepath;
+        Trace("ResourceManager::CacheResourceId: %s : '%s'", uuidStr.c_str(), filepath.c_str());
         
         node = node->next_sibling("resource");
     }
