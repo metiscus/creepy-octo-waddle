@@ -2,7 +2,28 @@
 #include "object.h"
 #include <cassert>
 
+const ResourceType PhysicsComponent::TypeId = 
+{
+    0x89, 0xd9, 0x4a, 0xd2,
+    0xa7, 0x32,
+    0x49, 0xde,
+    0x8e, 0xf5,
+    0xca, 0x95, 0x79, 0xc0, 0x00, 0xd4
+};
+
+std::shared_ptr<Resource> PhysicsComponent::Load(rapidxml::xml_document<> &doc)
+{
+    return std::shared_ptr<Resource>();
+}
+
 PhysicsComponent::PhysicsComponent()
+    : Component(TypeId)
+{
+    is_static_ = false;
+}
+
+PhysicsComponent::PhysicsComponent(const ResourceId& id)
+    : Component(id, TypeId)
 {
     is_static_ = false;
 }

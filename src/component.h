@@ -2,6 +2,7 @@
 #define COMPONENT_H_INCLUDED
 
 #include "global.h"
+#include "resource.h"
 
 class Object;
 class AIComponent;
@@ -15,11 +16,12 @@ enum ComponentId
     ComponentIdLast
 };
 
-class Component
+class Component : public Resource
 {
     Object* parent_;
 public:
-    Component();
+    Component(ResourceType type);
+    Component(ResourceId id, ResourceType type);
     virtual ~Component();
 
     Component(const Component&) = delete;

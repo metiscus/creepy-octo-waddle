@@ -12,7 +12,11 @@ class RenderComponent : public Component
     std::vector<DrawablePtr> drawables_;
 public:
     RenderComponent();
+    RenderComponent(const ResourceId& id);
     virtual ~RenderComponent() = default;
+    
+    static const ResourceType TypeId;
+    static std::shared_ptr<Resource> Load(rapidxml::xml_document<> &doc);
 
     static ComponentId GetComponentId();
 

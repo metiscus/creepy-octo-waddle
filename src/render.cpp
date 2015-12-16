@@ -174,7 +174,7 @@ void Render::InitGl()
     glClearColor(0.f, 0.2f, 0.2f, 0.f);
     glClearDepth(0.0);
     
-    ResourceManager::GetInstance().LoadResource( Resource::StringToResourceId("948f16fa-78ed-11e5-8bcf-feff819cdc9f") );
+    ResourceManager::GetInstance().LoadResource(Resource::StringToResourceId("948f16fa-78ed-11e5-8bcf-feff819cdc9f"));
     auto res = ResourceManager::GetInstance().GetResource(Resource::StringToResourceId("948f16fa-78ed-11e5-8bcf-feff819cdc9f"));
     auto tex = std::static_pointer_cast<Texture>(res);
 

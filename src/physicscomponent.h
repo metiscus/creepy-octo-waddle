@@ -11,7 +11,11 @@ class PhysicsComponent : public Component
 
 public:
     PhysicsComponent();
+    PhysicsComponent(const ResourceId& id);
     virtual ~PhysicsComponent() = default;
+
+    static const ResourceType TypeId;
+    static std::shared_ptr<Resource> Load(rapidxml::xml_document<> &doc);
 
     static ComponentId GetComponentId();
 

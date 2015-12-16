@@ -1,7 +1,15 @@
 #include "component.h"
 
-Component::Component()
-    : parent_(nullptr)
+Component::Component(ResourceType type)
+    : Resource(type)
+    , parent_(nullptr)
+{
+
+}
+
+Component::Component(ResourceId id, ResourceType type)
+    : Resource(id, type)
+    , parent_(nullptr)
 {
 
 }

@@ -2,8 +2,18 @@
 #include "physicscomponent.h"
 #include "object.h"
 
+const ResourceType AIComponent::TypeId = 
+{
+    0x89, 0xd9, 0x4a, 0xd2,
+    0xa7, 0x32,
+    0x49, 0xde,
+    0x8e, 0xf5,
+    0xca, 0x95, 0x79, 0xc0, 0x00, 0xd6
+};
+
 AIComponent::AIComponent()
-    : world_(nullptr)
+    : Component(TypeId)
+    , world_(nullptr)
 {
 
 }

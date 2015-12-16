@@ -13,6 +13,8 @@ class AIComponent : public Component
     float max_speed_;
 
 public:
+    static const ResourceType TypeId;
+    
     AIComponent();
     virtual ~AIComponent() = default;
 

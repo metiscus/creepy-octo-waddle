@@ -4,6 +4,7 @@
 #include "global.h"
 #include "log.h"
 
+#include <boost/uuid/random_generator.hpp>
 #include <boost/uuid/string_generator.hpp>
 #include <boost/uuid/uuid.hpp>
 
@@ -13,6 +14,13 @@ typedef boost::uuids::uuid ResourceType;
 class Resource
 {
 public:
+    Resource(const ResourceType& type)
+       : uuid_(boost::uuids::random_generator()())
+       , type_(type)
+    {
+        ;
+    }
+    
     Resource(const ResourceId& uuid, const ResourceType& type)
         : uuid_(uuid)
         , type_(type)
