@@ -19,6 +19,26 @@
 std::shared_ptr<AIWorld> ai_world;
 std::shared_ptr<Render> render;
 
+template<typename Base>
+class Wrapper
+{
+    struct Element
+    {
+        std::string name_;
+        
+        Element(const std::string& name)
+        {
+            name_ = name;
+        }
+    };
+
+public:
+    std::shared_ptr<Resource> operator()(rapidxml::xml_node<> *node)
+    {
+        
+    };
+};
+
 void add_yoshi( std::vector<std::shared_ptr<Object> > &objects, int x, int y)
 {
     DrawablePtr yoshi (new Drawable());

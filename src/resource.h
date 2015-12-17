@@ -8,6 +8,7 @@
 #include <boost/uuid/string_generator.hpp>
 #include <boost/uuid/uuid.hpp>
 
+
 typedef boost::uuids::uuid ResourceId;
 typedef boost::uuids::uuid ResourceType;
 
@@ -60,5 +61,6 @@ private:
     const ResourceId uuid_;
     const ResourceType type_;
 };
+
 
 #endif // RESOURCE_H_INCLUDED

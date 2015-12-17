@@ -30,6 +30,7 @@ GAME_SRC=\
 	src/rendercomponent.cpp\
 	src/drawable.cpp\
 	src/log.cpp\
+	src/resourcewrapper.cpp\
 	src/physicscomponent.cpp\
 	src/resourcemanager.cpp\
 	src/render/camera.cpp\

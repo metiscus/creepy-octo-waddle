@@ -16,5 +16,6 @@ Contains information for what type of primitives to draw
 First index
 count
 
-* 
-asdf
+* Thoughts
+Template based application of resource status
+ResourceWrapper<Geometry>.Member<Geometry::sets>()
