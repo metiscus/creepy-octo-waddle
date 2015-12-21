@@ -61,4 +61,4 @@ clean:
 	-rm src/global.h.gch
 	-find -name "*.o" -exec rm -f {} \;
 	-find -name "*.d" -exec rm -f {} \;
-	-rm -f game libglad.a
+	-rm -f game libglad.a extern/glad/src/glad.o
