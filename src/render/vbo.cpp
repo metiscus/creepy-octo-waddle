@@ -13,40 +13,45 @@ VBO::~VBO()
     glDeleteBuffers(1, &mVBO);
 }
 
-void VBO::setData(void *data, size_t dataSize, UsageType usage)
+void VBO::SetData(void *data, size_t dataSize, UsageType usage)
 {
     int32_t mode = _bindToGL(mMode);
     glBindBuffer(mode, mVBO);
     glBufferData(mode, dataSize, data, _usageToGL(usage));
 }
 
-void VBO::setDataOffset(int offset, void *data, size_t dataSize)
+void VBO::SetDataOffset(int offset, void *data, size_t dataSize)
 {
     int32_t mode = _bindToGL(mMode);
     glBindBuffer(mode, mVBO);
     glBufferSubData(mode, offset, dataSize, data);
 }
 
-void *VBO::mapBuffer(MappingType type)
+void *VBO::MapBuffer(MappingType type)
 {
     int32_t mode = _bindToGL(mMode);
     glBindBuffer(mode, mVBO);
     return glMapBuffer(mode, _mappingToGL(type));
 }
 
-void VBO::unmapBuffer()
+void VBO::UnmapBuffer()
 {
     glUnmapBuffer(_bindToGL(mMode));
 }
 
-void VBO::bind()
+void VBO::Bind()
 {
     glBindBuffer(_bindToGL(mMode), mVBO);
 }
 
-void VBO::unbind()
+void VBO::Unbind()
 {
     glBindBuffer(_bindToGL(mMode), 0);
+}
+
+void VBO::Draw(uint32_t type, uint32_t start, uint32_t count)
+{
+    glDrawArrays(type, start, count);
 }
 
 int32_t VBO::_bindToGL(BindMode mode)

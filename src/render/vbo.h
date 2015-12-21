@@ -42,7 +42,7 @@ public:
 		\param dataSize size of data pointed to by data
 		\param usage the intended usage for the data in this VBO (may impact performance)
 	*/
-	void setData(void* data, size_t dataSize, UsageType usage = DynamicDraw);
+	void SetData(void* data, size_t dataSize, UsageType usage = DynamicDraw);
 
 	/**
 		\brief Sets the data for a segment of the VBO
@@ -50,7 +50,7 @@ public:
 		\param data pointer to the data
 		\param dataSize size of data pointed to by data
 	*/
-	void setDataOffset(int offset, void* data, size_t dataSize);
+	void SetDataOffset(int offset, void* data, size_t dataSize);
 
 	enum MappingType {
 		ReadOnly,	//!< Only read operations
@@ -59,16 +59,18 @@ public:
 	};
 
 	/// Attempt to map the VBO memory into system memory for random access
-	void* mapBuffer(MappingType type);
+	void* MapBuffer(MappingType type);
 
 	/// Unmap the buffer
-	void  unmapBuffer();
+	void  UnmapBuffer();
 
 	/// Binds the VBO/PBO
-	void bind();
+	void Bind();
 
 	/// Unbinds the VBO/PBO (binds the target to 0)
-	void unbind();
+	void Unbind();
+
+	void Draw(uint32_t type, uint32_t start, uint32_t count);
 
 
 private:
