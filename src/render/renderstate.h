@@ -31,4 +31,23 @@ public:
     void ApplyState(const RenderState& state);
 };
 
+inline bool operator< (const RenderState& lhs, const RenderState& rhs)
+{
+    if(lhs.GetBlending() && !rhs.GetBlending())
+        return true;
+
+    if(lhs.GetProgram() != rhs.GetProgram())
+    {
+        return lhs.GetProgram() < rhs.GetProgram();
+    }
+
+    for(uint32_t ii=0; ii<MaxTextureUnits; ++ii)
+    {
+        if(lhs.GetActiveTexture(ii) != rhs.GetActiveTexture(ii))
+        {
+            return lhs.GetActiveTexture(ii) < rhs.GetActiveTexture(ii);
+        }
+    }
+}
+
 #endif
