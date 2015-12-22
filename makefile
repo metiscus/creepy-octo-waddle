@@ -34,17 +34,19 @@ GAME_SRC=\
 	src/physicscomponent.cpp\
 	src/resourcemanager.cpp\
 	src/render/camera.cpp\
+	src/render/geometry.cpp\
 	src/render/program.cpp\
 	src/render/sampler.cpp\
 	src/render/shader.cpp\
 	src/render/texture.cpp\
 	src/render/texturedata.cpp\
 	src/render/uniform.cpp\
+	src/render/renderstate.cpp\
 	src/render/vbo.cpp\
 	src/map/layer.cpp\
 	src/map/map.cpp\
 	src/map/tileset.cpp\
-	
+
 
 GAME_CPP= $(filter %.cpp,$(GAME_SRC))
 GAME_OBJ= $(GAME_CPP:.cpp=.o)
