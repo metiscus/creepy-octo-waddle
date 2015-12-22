@@ -38,6 +38,7 @@ GAME_SRC=\
 	src/render/program.cpp\
 	src/render/sampler.cpp\
 	src/render/shader.cpp\
+	src/render/sprite.cpp\
 	src/render/texture.cpp\
 	src/render/texturedata.cpp\
 	src/render/uniform.cpp\
