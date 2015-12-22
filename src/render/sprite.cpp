@@ -8,7 +8,6 @@ Sprite::Sprite()
     max_frame_  = 1;
     width_      = 0.f;
     height_     = 0.f;
-    layer_      = 0;
     is_transparent_ = false;
     is_dirty_   = true;
 }
@@ -53,11 +52,6 @@ void Sprite::SetSize(float width, float height)
     width_ = width;
     height_ = height;
     is_dirty_   = true;
-}
-
-void Sprite::SetLayer(int32_t layer)
-{
-    layer_ = layer;
 }
 
 void Sprite::SetPosition(const Vector& position)
@@ -109,11 +103,6 @@ void Sprite::GetSize(float& width, float& height) const
 {
     width = width_;
     height = height_;
-}
-
-int32_t Sprite::GetLayer() const
-{
-    return layer_;
 }
 
 const Vector& Sprite::GetPosition() const

@@ -14,7 +14,6 @@ class Sprite : public Geometry
     uint32_t max_frame_;
     float width_;
     float height_;
-    int32_t layer_;
     Vector position_;
     Vector offset_;
     bool is_transparent_;
@@ -31,7 +30,6 @@ public:
     void SetWidth(float width);
     void SetHeight(float height);
     void SetSize(float width, float height);
-    void SetLayer(int32_t layer);
     void SetPosition(const Vector& position);
     void SetOffset(const Vector& offset);
     void SetIsTransparent(bool trans);
@@ -42,7 +40,6 @@ public:
     float GetWidth() const;
     float GetHeight() const;
     void GetSize(float& width, float& height) const;
-    int32_t GetLayer() const;
     const Vector& GetPosition() const;
     const Vector& GetOffset() const;
     bool GetIsTransparent() const;
