@@ -31,6 +31,8 @@ public:
     void ApplyState(const RenderState& state);
 };
 
+typedef std::shared_ptr<RenderState> RenderStatePtr;
+
 inline bool operator< (const RenderState& lhs, const RenderState& rhs)
 {
     if(lhs.GetBlending() && !rhs.GetBlending())
@@ -48,6 +50,16 @@ inline bool operator< (const RenderState& lhs, const RenderState& rhs)
             return lhs.GetActiveTexture(ii) < rhs.GetActiveTexture(ii);
         }
     }
+}
+
+inline bool operator< (const RenderStatePtr& lhs, const RenderStatePtr& rhs)
+{
+    if(!rhs && lhs)
+        return true;
+    else if(rhs && !lhs)
+        return false;
+    else
+        return lhs.get() < rhs.get();
 }
 
 #endif
